@@ -5,23 +5,27 @@
  */
 package me.niels.schemagenerator.schema;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  *
  * @author Niels
  */
 public class EdgeType {
 
-    public String type;
+    public String label;
     public int edgeCount;
-
+    public Map<String, PropertyType> properties;
 
     public EdgeType(String type) {
-        this.type = type;
+        this.label = type;
         this.edgeCount = 1;
+        this.properties = new HashMap<>();
     }
 
     @Override
     public String toString() {
-        return type;
+        return label;
     }
 }

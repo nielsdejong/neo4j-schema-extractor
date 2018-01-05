@@ -5,6 +5,7 @@
  */
 package me.niels.schemagenerator.schema;
 
+import java.util.ArrayList;
 import me.niels.schemagenerator.schema.EdgeType;
 import java.util.HashMap;
 import java.util.List;
@@ -20,14 +21,15 @@ public class NodeType {
 
     public String label;
     public int nodeCount;
-
-
+    
     public Map<Entry<EdgeType, NodeType>, List<Integer>> outDistributionCounter;
     public Map<Entry<NodeType, EdgeType>, List<Integer>> inDistributionCounter;
     
     public Map<Entry<EdgeType, NodeType>, Distribution> outDistributions;
     public Map<Entry<NodeType, EdgeType>, Distribution> inDistributions;
 
+    public Map<String, PropertyType> properties;
+    
     public NodeType(String label) {
         this.label = label;
         this.nodeCount = 1;
@@ -35,6 +37,7 @@ public class NodeType {
         this.inDistributionCounter = new HashMap<>();
         this.inDistributions = new HashMap<>();
         this.outDistributions = new HashMap<>();
+        this.properties = new HashMap<>();
     }
 
     @Override

@@ -11,10 +11,10 @@ package me.niels.distribution;
  */
 public class UniformDistribution extends Distribution {
 
-    public int min;
-    public int max;
+    public double min;
+    public double max;
 
-    public UniformDistribution(double error, int min, int max) {
+    public UniformDistribution(double error, double min, double max) {
         this.error = error;
         this.min = min;
         this.max = max;

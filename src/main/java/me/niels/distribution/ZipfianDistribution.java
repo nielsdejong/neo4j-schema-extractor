@@ -12,14 +12,16 @@ package me.niels.distribution;
 public class ZipfianDistribution extends Distribution {
 
     public double alpha;
+    public double xMin;
 
-    public ZipfianDistribution(double error, double alpha) {
+    public ZipfianDistribution(double error, double alpha, double xMin) {
         this.error = error;
         this.alpha = alpha;
+        this.xMin = xMin;
     }
 
     @Override
     public String toString() {
-        return "ZIPFIAN(alpha=" + alpha + ", error=" + error + ")";
+        return "ZIPFIAN(alpha=" + alpha +", xMin="+xMin + ", error=" + error + ")";
     }
 }

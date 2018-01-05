@@ -8,13 +8,10 @@ package me.niels.distribution;
 import java.util.ArrayList;
 import java.util.List;
 import nl.peterbloem.powerlaws.Continuous;
-import org.apache.commons.math3.analysis.function.Gaussian;
-import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
-import org.apache.commons.math3.exception.NotStrictlyPositiveException;
-import org.apache.commons.math3.exception.TooManyEvaluationsException;
-import org.apache.commons.math3.fitting.GaussianFitter;
-import org.apache.commons.math3.fitting.PolynomialFitter;
-import org.apache.commons.math3.optim.nonlinear.vector.jacobian.LevenbergMarquardtOptimizer;
+import org.apache.commons.math3.distribution.NormalDistribution;
+import org.apache.commons.math3.distribution.UniformRealDistribution;
+import org.apache.commons.math3.distribution.ZipfDistribution;
+import org.apache.commons.math3.stat.inference.KolmogorovSmirnovTest;
 
 /**
  * Attempts to fit a set of data points to either a normal, Gaussian or Zipfian
@@ -27,108 +24,90 @@ public class DistributionFitter {
 
     /**
      * Fits data to a normal, Gaussian and Zipfian distribution. Returns the
-     * best fitting distribution based on the RMSE/ST.DEV. measure.
+     * best fitting distribution based on the Kolmogorov Smirnov statistic.
      *
-     * @param xValues
-     * @param yValues
+     * @param values
      * @return a fitting distribution.
      */
-    public static Distribution fit(int[] xValues, int[] yValues) {
-
-        Distribution uniform = fitUniform(xValues, yValues);
+    public static Distribution fit(List<Double> values) {
+        Distribution uniform = fitUniform(values);
         Distribution bestFit = uniform;
 
-        if (xValues.length >= 3) {
-            Distribution gaussian = fitGaussian(xValues, yValues);
+        if (values.size() >= 3) {
+            Distribution gaussian = fitGaussian(values);
             if (gaussian.error < bestFit.error) {
                 bestFit = gaussian;
             }
         }
-        if (xValues.length >= 2) {
-            Distribution zipfian = fitZipfian(xValues, yValues);
+        if (values.size() >= 2) {
+            Distribution zipfian = fitZipfian(values);
             if (zipfian.error < bestFit.error) {
                 bestFit = zipfian;
-            }
+                
+            }   
         }
-
+    
         return bestFit;
     }
 
-    private static UniformDistribution fitUniform(int[] xValues, int[] yValues) {
-        LevenbergMarquardtOptimizer optimizer = new LevenbergMarquardtOptimizer();
-
-        PolynomialFitter fitter = new PolynomialFitter(optimizer);
-        int yMin = Integer.MAX_VALUE;
-        int yMax = Integer.MIN_VALUE;
-        for (int a = 0; a < xValues.length; a++) {
-            fitter.addObservedPoint(xValues[a], yValues[a]);
-
-            if (yValues[a] < yMin) {
-                yMin = yValues[a];
-            }
-            if (yValues[a] > yMax) {
-                yMax = yValues[a];
-            }
+    public static Distribution fitIntegerList(List<Integer> values) {
+        List<Double> doubleValues = new ArrayList<>(values.size());
+        for (int value : values) {
+            doubleValues.add((double) value);
         }
-        double[] initialGuess = {0};
-        double[] func = fitter.fit(new PolynomialFunction.Parametric(), initialGuess);
-
-        return new UniformDistribution(optimizer.getRMS(), yMin, yMax);
+        return fit(doubleValues);
     }
 
-    private static GaussianDistribution fitGaussian(int[] xValues, int[] yValues) {
-        PolynomialFunction.Parametric f = new PolynomialFunction.Parametric();
-
-        LevenbergMarquardtOptimizer optimizer = new LevenbergMarquardtOptimizer();
-        GaussianFitter fitter = new GaussianFitter(optimizer);
-
-        for (int a = 0; a < xValues.length; a++) {
-            fitter.addObservedPoint(yValues[a], 0, xValues[a]);
-        }
-
-        double[] initialGuess = {1, xValues.length / 2, 1};
-        try {
-
-            double[] func = fitter.fit(256, new Gaussian.Parametric(), initialGuess);
-            return new GaussianDistribution(Math.sqrt(func[2]), func[0], func[1], func[2]);
-        } catch (TooManyEvaluationsException | NotStrictlyPositiveException e) {
-            return new GaussianDistribution(Double.MAX_VALUE, 0, 0, 0);
-        }
-    }
-
-    private static ZipfianDistribution fitZipfian(int[] xValues, int[] yValues) {
-        List<Double> yValuesList = new ArrayList<>();
-        for (int x = 0; x < xValues.length; x++) {
-            for (int y = 0; y < yValues[x]; y++) {
-                yValuesList.add((double)xValues[x]);
+    private static UniformDistribution fitUniform(List<Double> values) {
+        double yMin = Integer.MAX_VALUE;
+        double yMax = Integer.MIN_VALUE;
+        double[] valueArray = new double[values.size()];
+        for (int a = 0; a < values.size(); a++) {
+            valueArray[a] = values.get(a);
+            if (valueArray[a] < yMin) {
+                yMin = valueArray[a];
+            }
+            if (valueArray[a] > yMax) {
+                yMax = valueArray[a];
             }
         }
+        if (yMin == yMax) {
+            return new UniformDistribution(0.0, yMin, yMax);
+        }
+        UniformRealDistribution uniform = new UniformRealDistribution(yMin, yMax);
+        KolmogorovSmirnovTest test = new KolmogorovSmirnovTest();
+        return new UniformDistribution(test.kolmogorovSmirnovStatistic(uniform, valueArray), yMin, yMax);
+    }
 
-        Continuous distribution = Continuous.fit(yValuesList).fit();
+    private static GaussianDistribution fitGaussian(List<Double> values) {
+        int mean = 1;
+        int sd = 1;
+        double[] valueArray = new double[values.size()];
+        for (int a = 0; a < values.size(); a++) {
+            valueArray[a] = values.get(a);
+        }
+        NormalDistribution normal = new NormalDistribution(mean, sd);
+        return new GaussianDistribution(Double.MAX_VALUE, 0, 0, 0);
+    }
 
+    private static ZipfianDistribution fitZipfian(List<Double> values) {
+        Continuous distribution = Continuous.fit(values).fit();
         if (distribution == null) {
-            return new ZipfianDistribution(Double.MAX_VALUE, 0);
+            return new ZipfianDistribution(Double.MAX_VALUE, Double.NaN, Double.NaN);
         }
-
-        double exponent = distribution.exponent();
-        double xMin = distribution.xMin();
         
-        double[] yFunction = new double[xValues.length];
-        for (int x = 0; x < xValues.length; x++) {
-            yFunction[x] = (1.0 / Math.pow((double) x+xMin, exponent));
+        ZipfDistribution d = new ZipfDistribution(values.size(), distribution.exponent());
+        int[] distributionSample = d.sample(values.size());
 
+        double[] valueArray = new double[values.size()];
+        double[] distributionArray = new double[values.size()];
+        for (int a = 0; a < values.size(); a++) {
+            valueArray[a] = values.get(a);
+            distributionArray[a] = distributionSample[a];
         }
 
-        return new ZipfianDistribution(RMSE(yValues, yFunction), exponent);
-
-    }
-
-    public static double RMSE(int[] yReal, double[] yFunction) {
-        double a = 0.0;
-        for (int i = 0; i < yReal.length; i++) {
-            a += Math.sqrt((double) Math.abs(yReal[i] - yFunction[i]));
-
-        }
-        return Math.sqrt(a / (double) yReal.length);
+        KolmogorovSmirnovTest test = new KolmogorovSmirnovTest();
+        double error = test.kolmogorovSmirnovStatistic(distributionArray, valueArray);
+        return new ZipfianDistribution(error, distribution.exponent(), distribution.xMin());
     }
 }
