@@ -3,14 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package me.niels.distribution;
+package me.niels.values.schemagenerator.distribution;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import nl.peterbloem.powerlaws.Continuous;
 import org.apache.commons.math3.distribution.NormalDistribution;
 import org.apache.commons.math3.distribution.UniformRealDistribution;
 import org.apache.commons.math3.distribution.ZipfDistribution;
+import org.apache.commons.math3.exception.TooManyIterationsException;
+import org.apache.commons.math3.fitting.GaussianCurveFitter;
+import org.apache.commons.math3.fitting.WeightedObservedPoints;
 import org.apache.commons.math3.stat.inference.KolmogorovSmirnovTest;
 
 /**
@@ -21,6 +26,8 @@ import org.apache.commons.math3.stat.inference.KolmogorovSmirnovTest;
  * @author Niels
  */
 public class DistributionFitter {
+
+    public static final int MAX_GAUSSIAN_FITTING_ITERATIONS = 1024;
 
     /**
      * Fits data to a normal, Gaussian and Zipfian distribution. Returns the
@@ -35,18 +42,17 @@ public class DistributionFitter {
 
         if (values.size() >= 3) {
             Distribution gaussian = fitGaussian(values);
-            if (gaussian.error < bestFit.error) {
+            if (gaussian.testparameter < bestFit.testparameter) {
                 bestFit = gaussian;
             }
         }
-        if (values.size() >= 2) {
+        if (values.size() >= 3) {
             Distribution zipfian = fitZipfian(values);
-            if (zipfian.error < bestFit.error) {
+            if (zipfian.testparameter < bestFit.testparameter) {
                 bestFit = zipfian;
-                
-            }   
+
+            }
         }
-    
         return bestFit;
     }
 
@@ -80,14 +86,47 @@ public class DistributionFitter {
     }
 
     private static GaussianDistribution fitGaussian(List<Double> values) {
-        int mean = 1;
-        int sd = 1;
-        double[] valueArray = new double[values.size()];
-        for (int a = 0; a < values.size(); a++) {
-            valueArray[a] = values.get(a);
+
+        WeightedObservedPoints obs = new WeightedObservedPoints();
+        Map<Double, Double> valueCounts = new HashMap<>();
+
+        for (double value : values) {
+            if (valueCounts.containsKey(value)) {
+                valueCounts.put(value, valueCounts.get(value) + 1);
+            } else {
+                valueCounts.put(value, 1.0);
+            }
         }
-        NormalDistribution normal = new NormalDistribution(mean, sd);
-        return new GaussianDistribution(Double.MAX_VALUE, 0, 0, 0);
+        // Too few data points to fit a gaussian distribution
+        if (valueCounts.keySet().size() < 3) {
+            return new GaussianDistribution(Double.MAX_VALUE, Double.NaN, Double.NaN, Double.NaN);
+        }
+        for (Double key : valueCounts.keySet()) {
+            obs.add(key, valueCounts.get(key));
+        }
+        // Attempt to fit to gaussian distribution
+        try {
+            double[] parameters = GaussianCurveFitter.create().withMaxIterations(MAX_GAUSSIAN_FITTING_ITERATIONS).fit(obs.toList());
+            
+            // Extract parameters
+            double norm = parameters[0];
+            double mean = parameters[1];
+            double sigma = parameters[2];
+            
+            // Convert list to array.
+            double[] valueArray = new double[values.size()];
+            for (int a = 0; a < values.size(); a++) {
+                valueArray[a] = values.get(a);
+            }
+            
+            // Do KS test.
+            NormalDistribution normal = new NormalDistribution(mean, sigma);
+            KolmogorovSmirnovTest test = new KolmogorovSmirnovTest();
+            return new GaussianDistribution(test.kolmogorovSmirnovStatistic(normal, valueArray), norm, mean, sigma);
+        } catch (TooManyIterationsException e) {
+            // Impossible to fit
+            return new GaussianDistribution(Double.MAX_VALUE, Double.NaN, Double.NaN, Double.NaN);
+        }
     }
 
     private static ZipfianDistribution fitZipfian(List<Double> values) {
@@ -95,7 +134,7 @@ public class DistributionFitter {
         if (distribution == null) {
             return new ZipfianDistribution(Double.MAX_VALUE, Double.NaN, Double.NaN);
         }
-        
+
         ZipfDistribution d = new ZipfDistribution(values.size(), distribution.exponent());
         int[] distributionSample = d.sample(values.size());
 

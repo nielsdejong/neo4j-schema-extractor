@@ -42,21 +42,23 @@ public class Schema {
             for (Entry<NodeType, EdgeType> inEdge : nodeTypes.get(name).inDistributions.keySet()) {
                 schema += "            [" + inEdge.getKey() + "-" + inEdge.getValue() + "->" + name + "]: " + nodeTypes.get(name).inDistributions.get(inEdge) + "\n";
             }
+            schema += "        properties: \n";
             for (String propertyName : nodeTypes.get(name).properties.keySet()) {
-                schema += "        Property: " + propertyName + "\n";
-                schema += "            dist:" + nodeTypes.get(name).properties.get(propertyName).amountDistribution + "\n";
-                schema += "            class:" + nodeTypes.get(name).properties.get(propertyName).className + "\n";
-                schema += "            valuedist:" + nodeTypes.get(name).properties.get(propertyName).valueDistribution + "\n";
+                schema += "            " + propertyName + "\n";
+                schema += "                dist:" + nodeTypes.get(name).properties.get(propertyName).amountDistribution + "\n";
+                schema += "                class:" + nodeTypes.get(name).properties.get(propertyName).className + "\n";
+                schema += "                valuedist:" + nodeTypes.get(name).properties.get(propertyName).valueSchema + "\n";
             }
         }
         for (String name : edgeTypes.keySet()) {
             schema += "    Edge: " + name + "\n";
             schema += "        fraction: " + edgeTypes.get(name).edgeCount / (double) totalEdgeCount + "\n";
+            schema += "        properties: \n";
             for (String propertyName : edgeTypes.get(name).properties.keySet()) {
-                schema += "        Property:" + propertyName + "\n";
-                schema += "            dist:" + edgeTypes.get(name).properties.get(propertyName).amountDistribution + "\n";
-                schema += "            class:" + edgeTypes.get(name).properties.get(propertyName).className + "\n";
-                schema += "            valuedist:" + edgeTypes.get(name).properties.get(propertyName).valueDistribution + "\n";
+                schema += "            " + propertyName + "\n";
+                schema += "                dist:" + edgeTypes.get(name).properties.get(propertyName).amountDistribution + "\n";
+                schema += "                class:" + edgeTypes.get(name).properties.get(propertyName).className + "\n";
+                schema += "                valuedist:" + edgeTypes.get(name).properties.get(propertyName).valueSchema + "\n";
             }
         }
         return schema;

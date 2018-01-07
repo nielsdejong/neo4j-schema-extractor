@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package me.niels.distribution;
+package me.niels.values.schemagenerator.distribution;
 
 /**
  *
@@ -15,9 +15,9 @@ public class GaussianDistribution extends Distribution {
     public double sigma;
     public double norm;
 
-    GaussianDistribution(double error, double norm, double mu, double sigma) {
+    GaussianDistribution(double testparameter, double norm, double mu, double sigma) {
 
-        this.error = error;
+        this.testparameter = testparameter;
         this.norm = norm;
         this.mu = mu;
         this.sigma = sigma;
@@ -25,6 +25,6 @@ public class GaussianDistribution extends Distribution {
 
     @Override
     public String toString() {
-        return "GAUSSIAN(norm=" + norm + ", mu=" + mu + ", sigma=" + sigma + ", error=" + error;
+        return "GAUSSIAN(norm=" + norm + ", mu=" + mu + ", sigma=" + sigma + ", testparameter=" + testparameter;
     }
 }

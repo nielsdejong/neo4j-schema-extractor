@@ -1,7 +1,7 @@
 package me.niels.schemagenerator;
 
 import java.util.AbstractMap;
-import me.niels.distribution.DistributionFitter;
+import me.niels.values.schemagenerator.distribution.DistributionFitter;
 import me.niels.schemagenerator.schema.EdgeType;
 import me.niels.schemagenerator.schema.NodeType;
 import me.niels.schemagenerator.graph.Edge;
@@ -12,14 +12,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import me.niels.distribution.Distribution;
+import me.niels.values.schemagenerator.distribution.Distribution;
 import me.niels.schemagenerator.graph.Graph;
 import me.niels.schemagenerator.graph.Property;
 import me.niels.schemagenerator.schema.PropertyType;
 import me.niels.schemagenerator.schema.Schema;
+import me.niels.schemagenerator.values.enumerated.EnumDistribution;
 
 public class SchemaGenerator {
-
+    public static int ENUM_COUNT_LIMIT = 256;
+    
     // Neo4J Querying service.
     public DataLoader dataLoader;
     // Graph Model
@@ -66,10 +68,10 @@ public class SchemaGenerator {
         computePropertyDistributions();
 
         // Determine Property Value classes
-        findPropertyValueClass();
+        findPropertyValueClasses();
 
         // Determine Property Value distributions
-        computePropertyValueDistributions();
+        computePropertyValueSchemas();
     }
 
     public void countEdgeDistributions() {
@@ -157,40 +159,31 @@ public class SchemaGenerator {
     private void countPropertyDistributions() {
         for (Node n : graph.nodes.values()) {
             for (PropertyType pType : n.type.properties.values()) {
-                int count = 0;
-                for (Property p : n.properties) {
-                    if (p.name.equals(pType.name)) {
-                        if (p.values.getClass().equals(Set.class)) {
-                            count = ((Set) p.values).size();
-                        } else if (p.values.getClass().equals(List.class)) {
-                            count = ((List) p.values).size();
-                        } else {
-                            count = 1;
-                        }
-                        break;
-                    }
-                }
-                pType.distributionCounter.add(count);
+                countPropertyDistribution(pType, n.properties);
             }
         }
         for (Edge e : graph.edges.values()) {
             for (PropertyType pType : e.type.properties.values()) {
-                int count = 0;
-                for (Property p : e.properties) {
-                    if (p.name.equals(pType.name)) {
-                        if (p.values.getClass().equals(Set.class)) {
-                            count = ((Set) p.values).size();
-                        } else if (p.values.getClass().equals(List.class)) {
-                            count = ((List) p.values).size();
-                        } else {
-                            count = 1;
-                        }
-                        break;
-                    }
-                }
-                pType.distributionCounter.add(count);
+                countPropertyDistribution(pType, e.properties);
             }
         }
+    }
+
+    private void countPropertyDistribution(PropertyType pType, List<Property> properties) {
+        int count = 0;
+        for (Property p : properties) {
+            if (p.name.equals(pType.name)) {
+                if (p.values.getClass().equals(Set.class)) {
+                    count = ((Set) p.values).size();
+                } else if (p.values.getClass().equals(List.class)) {
+                    count = ((List) p.values).size();
+                } else {
+                    count = 1;
+                }
+                break;
+            }
+        }
+        pType.distributionCounter.add(count);
     }
 
     private void computePropertyDistributions() {
@@ -206,60 +199,74 @@ public class SchemaGenerator {
         }
     }
 
-    private void findPropertyValueClass() {
+    private void findPropertyValueClasses() {
         for (NodeType n : schema.nodeTypes.values()) {
             for (PropertyType pType : n.properties.values()) {
-                String className = null;
-                for (Object pValue : pType.values) {
-                    if (className == null) {
-                        className = pValue.getClass().getSimpleName();
-                    } else if (!pValue.getClass().getSimpleName().equals(className)) {
-                        // If we find two values with different types, we set the class to String.
-                        className = "String";
-                        break;
-                    }
-                }
-                pType.className = className;
+                findPropertyValueClass(pType);
             }
         }
         for (EdgeType e : schema.edgeTypes.values()) {
             for (PropertyType pType : e.properties.values()) {
-                String className = null;
-                for (Object pValue : pType.values) {
-                    if (className == null) {
-                        className = pValue.getClass().getSimpleName();
-                    } else if (!pValue.getClass().getSimpleName().equals(className)) {
-                        // If we find two values with different types, we set the class to String.
-                        className = "String";
-                        break;
-                    }
-                }
-                pType.className = className;
+                findPropertyValueClass(pType);
             }
         }
     }
 
-    private void computePropertyValueDistributions() {
+    private void findPropertyValueClass(PropertyType pType) {
+        String className = null;
+        for (Object pValue : pType.values) {
+            if (className == null) {
+                className = pValue.getClass().getSimpleName();
+            } else if (!pValue.getClass().getSimpleName().equals(className)) {
+                // If we find two values with different types, we set the class to String.
+                className = "String";
+                break;
+            }
+        }
+        pType.className = className;
+    }
+
+    private void computePropertyValueSchemas() {
         for (NodeType n : schema.nodeTypes.values()) {
             for (PropertyType pType : n.properties.values()) {
-                if ("Long".equals(pType.className) || "Short".equals(pType.className) || "Integer".equals(pType.className)) {
-                    List<Double> values = new ArrayList<>(pType.values.size());
-                    for (Object value : pType.values) {
-                        values.add(((Long) value).doubleValue());
-                    }
-                    pType.valueDistribution = DistributionFitter.fit(values);
-                }
+                computePropertyValueSchema(pType);
             }
         }
         for (EdgeType e : schema.edgeTypes.values()) {
             for (PropertyType pType : e.properties.values()) {
-                if ("Long".equals(pType.className) || "Short".equals(pType.className) || "Integer".equals(pType.className)) {
-                    List<Double> values = new ArrayList<>(pType.values.size());
-                    for (Object value : pType.values) {
-                        values.add(((Long) value).doubleValue());
-                    }
-                    pType.valueDistribution = DistributionFitter.fit(values);
+                computePropertyValueSchema(pType);
+            }
+        }
+    }
+
+    private void computePropertyValueSchema(PropertyType pType) {
+        if ("Long".equals(pType.className) || "Short".equals(pType.className) || "Integer".equals(pType.className)) {
+            // We are dealing with numbers.
+            List<Double> values = new ArrayList<>(pType.values.size());
+            for (Object value : pType.values) {
+                values.add(((Long) value).doubleValue());
+            }
+            pType.valueSchema = DistributionFitter.fit(values);
+        } else {
+            // We are dealing with non-numeric values.
+            List<String> values = new ArrayList<>(pType.values.size());
+            Map<String, Double> stringValueCounter = new HashMap<>();
+            for (Object value : pType.values) {
+                values.add((value.toString()));
+            }
+            for (String value : values) {
+                if(stringValueCounter.containsKey(value)){
+                    stringValueCounter.put(value, stringValueCounter.get(value)+1.0/values.size());
+                }else{
+                    stringValueCounter.put(value, 1.0/values.size());
                 }
+            }
+            if(stringValueCounter.size() < ENUM_COUNT_LIMIT){
+                // We consider this property an ENUM.
+                pType.valueSchema = new EnumDistribution(stringValueCounter);
+            }else{
+                // We consider this property a regex.
+                return;
             }
         }
     }

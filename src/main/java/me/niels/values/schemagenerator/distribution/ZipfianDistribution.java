@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package me.niels.distribution;
+package me.niels.values.schemagenerator.distribution;
 
 /**
  *
@@ -14,14 +14,14 @@ public class ZipfianDistribution extends Distribution {
     public double alpha;
     public double xMin;
 
-    public ZipfianDistribution(double error, double alpha, double xMin) {
-        this.error = error;
+    public ZipfianDistribution(double testparameter, double alpha, double xMin) {
+        this.testparameter = testparameter;
         this.alpha = alpha;
         this.xMin = xMin;
     }
 
     @Override
     public String toString() {
-        return "ZIPFIAN(alpha=" + alpha +", xMin="+xMin + ", error=" + error + ")";
+        return "ZIPFIAN(alpha=" + alpha +", xMin="+xMin + ", testparameter=" + testparameter + ")";
     }
 }

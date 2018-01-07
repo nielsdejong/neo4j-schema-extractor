@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import me.niels.distribution.Distribution;
+import me.niels.values.schemagenerator.distribution.Distribution;
 
 /**
  *
