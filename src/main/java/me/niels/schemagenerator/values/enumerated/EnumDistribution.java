@@ -25,7 +25,7 @@ public class EnumDistribution extends ValueSchema {
     public String toString(){
         String result = "ENUMDISTRIBUTION(";
         for(String value : values.keySet()){
-            result+= "["+value+": "+values.get(value)+"] ";
+            result+= "['"+value.substring(0,Math.min(value.length(), 20))+"': "+values.get(value)+"] ";
         }
         return result +")";
     }

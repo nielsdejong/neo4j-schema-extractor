@@ -41,6 +41,9 @@ public class DataLoader {
             long id = (long) ((List) data[0]).get(0);
 
             // Node label
+            if(((List) data[0]).size() == 1){
+                continue;
+            }
             String label = (String) ((List) data[0]).get(1);
             if (!nodeTypes.keySet().contains(label)) {
                 nodeTypes.put(label, new NodeType(label));

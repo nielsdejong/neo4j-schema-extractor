@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import me.niels.values.schemagenerator.distribution.Distribution;
+import me.niels.values.schemagenerator.distribution.NumericDistribution;
 
 /**
  *
@@ -25,8 +25,8 @@ public class NodeType {
     public Map<Entry<EdgeType, NodeType>, List<Integer>> outDistributionCounter;
     public Map<Entry<NodeType, EdgeType>, List<Integer>> inDistributionCounter;
     
-    public Map<Entry<EdgeType, NodeType>, Distribution> outDistributions;
-    public Map<Entry<NodeType, EdgeType>, Distribution> inDistributions;
+    public Map<Entry<EdgeType, NodeType>, NumericDistribution> outDistributions;
+    public Map<Entry<NodeType, EdgeType>, NumericDistribution> inDistributions;
 
     public Map<String, PropertyType> properties;
     

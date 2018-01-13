@@ -10,6 +10,6 @@ import me.niels.schemagenerator.schema.ValueSchema;
  *
  * @author Niels
  */
-public abstract class Distribution extends ValueSchema{
+public abstract class NumericDistribution extends ValueSchema{
         public double testparameter;
 }

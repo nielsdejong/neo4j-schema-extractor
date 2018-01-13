@@ -7,7 +7,7 @@ package me.niels.schemagenerator.schema;
 
 import java.util.ArrayList;
 import java.util.List;
-import me.niels.values.schemagenerator.distribution.Distribution;
+import me.niels.values.schemagenerator.distribution.NumericDistribution;
 
 /**
  *
@@ -15,7 +15,7 @@ import me.niels.values.schemagenerator.distribution.Distribution;
  */
 public class PropertyType {
     public String name;
-    public Distribution amountDistribution;
+    public NumericDistribution amountDistribution;
     public List<Integer> distributionCounter;
     public List<Object> values;
     public String className;

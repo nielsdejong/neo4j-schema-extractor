@@ -27,7 +27,8 @@ import org.apache.commons.math3.stat.inference.KolmogorovSmirnovTest;
  */
 public class DistributionFitter {
 
-    public static final int MAX_GAUSSIAN_FITTING_ITERATIONS = 1024;
+    public static final int MAX_GAUSSIAN_FITTING_ITERATIONS = 256;
+    public static final int ZIPFIAN_UNIQUE_VALUE_LIMIT = 1000;
 
     /**
      * Fits data to a normal, Gaussian and Zipfian distribution. Returns the
@@ -36,18 +37,22 @@ public class DistributionFitter {
      * @param values
      * @return a fitting distribution.
      */
-    public static Distribution fit(List<Double> values) {
-        Distribution uniform = fitUniform(values);
-        Distribution bestFit = uniform;
+    public static NumericDistribution fit(List<Double> values) {
+
+        NumericDistribution uniform = fitUniform(values);
+        NumericDistribution bestFit = uniform;
 
         if (values.size() >= 3) {
-            Distribution gaussian = fitGaussian(values);
+            NumericDistribution gaussian = fitGaussian(values);
             if (gaussian.testparameter < bestFit.testparameter) {
                 bestFit = gaussian;
             }
         }
         if (values.size() >= 3) {
-            Distribution zipfian = fitZipfian(values);
+            if(values.get(0) > 1000000){
+              //  return bestFit;
+            }
+            NumericDistribution zipfian = fitZipfian(values);
             if (zipfian.testparameter < bestFit.testparameter) {
                 bestFit = zipfian;
 
@@ -56,7 +61,7 @@ public class DistributionFitter {
         return bestFit;
     }
 
-    public static Distribution fitIntegerList(List<Integer> values) {
+    public static NumericDistribution fitIntegerList(List<Integer> values) {
         List<Double> doubleValues = new ArrayList<>(values.size());
         for (int value : values) {
             doubleValues.add((double) value);
@@ -104,21 +109,22 @@ public class DistributionFitter {
         for (Double key : valueCounts.keySet()) {
             obs.add(key, valueCounts.get(key));
         }
+        
         // Attempt to fit to gaussian distribution
         try {
             double[] parameters = GaussianCurveFitter.create().withMaxIterations(MAX_GAUSSIAN_FITTING_ITERATIONS).fit(obs.toList());
-            
+
             // Extract parameters
             double norm = parameters[0];
             double mean = parameters[1];
             double sigma = parameters[2];
-            
+
             // Convert list to array.
             double[] valueArray = new double[values.size()];
             for (int a = 0; a < values.size(); a++) {
                 valueArray[a] = values.get(a);
             }
-            
+
             // Do KS test.
             NormalDistribution normal = new NormalDistribution(mean, sigma);
             KolmogorovSmirnovTest test = new KolmogorovSmirnovTest();
@@ -130,11 +136,24 @@ public class DistributionFitter {
     }
 
     private static ZipfianDistribution fitZipfian(List<Double> values) {
+         Map<Double, Double> valueCounts = new HashMap<>();
+
+        for (double value : values) {
+            if (valueCounts.containsKey(value)) {
+                valueCounts.put(value, valueCounts.get(value) + 1);
+            } else {
+                valueCounts.put(value, 1.0);
+            }
+        }
+        if(valueCounts.size() > ZIPFIAN_UNIQUE_VALUE_LIMIT){
+            return new ZipfianDistribution(Double.MAX_VALUE, Double.NaN, Double.NaN);
+        }
+        
+        
         Continuous distribution = Continuous.fit(values).fit();
         if (distribution == null) {
             return new ZipfianDistribution(Double.MAX_VALUE, Double.NaN, Double.NaN);
         }
-
         ZipfDistribution d = new ZipfDistribution(values.size(), distribution.exponent());
         int[] distributionSample = d.sample(values.size());
 

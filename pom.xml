@@ -11,20 +11,20 @@
     <properties>
         <neo4j.version>3.0.4</neo4j.version>
     </properties>
-    	<repositories>
-		<repository>
-		    <id>jitpack.io</id>
-		    <url>https://jitpack.io</url>
-		</repository>
-	</repositories>
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
     <dependencies>
-<!-- tag::bolt-dependency[] -->
+        <!-- tag::bolt-dependency[] -->
         <dependency>
             <groupId>org.neo4j.driver</groupId>
             <artifactId>neo4j-java-driver</artifactId>
             <version>1.0.5</version>
         </dependency>
-<!-- end::bolt-dependency[] -->
+        <!-- end::bolt-dependency[] -->
         <dependency>
             <groupId>org.neo4j.test</groupId>
             <artifactId>neo4j-harness</artifactId>
@@ -49,7 +49,11 @@
             <version>4.11</version>
             <scope>test</scope>
         </dependency>
-
+        <dependency>
+          <groupId>me.geso</groupId>
+          <artifactId>regexp-trie</artifactId>
+          <version>1.0.5</version>
+        </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
@@ -77,10 +81,10 @@
             <type>jar</type>
         </dependency>
         <dependency>
-	    <groupId>com.github.Data2Semantics</groupId>
-	    <artifactId>powerlaws</artifactId>
-	    <version>v0.1.0</version>
-	</dependency>
+            <groupId>com.github.Data2Semantics</groupId>
+            <artifactId>powerlaws</artifactId>
+            <version>v0.1.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -129,7 +133,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                               <mainClass>me.niels.schemagenerator.schemaGenerator</mainClass>
+                    <mainClass>me.niels.schemagenerator.schemaGenerator</mainClass>
                 </configuration>
             </plugin>
         </plugins>
