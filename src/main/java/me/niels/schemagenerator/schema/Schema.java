@@ -5,7 +5,9 @@
  */
 package me.niels.schemagenerator.schema;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -20,10 +22,11 @@ public class Schema {
     public Map<String, EdgeType> edgeTypes;
     public int totalNodeCount = 0;
     public int totalEdgeCount = 0;
-
+    public List<String> rules;
     public Schema() {
         nodeTypes = new HashMap<>();
         edgeTypes = new HashMap<>();
+        rules = new ArrayList<>();
     }
 
     @Override
@@ -60,6 +63,10 @@ public class Schema {
                 schema += "                class:" + edgeTypes.get(name).properties.get(propertyName).className + "\n";
                 schema += "                valuedist:" + edgeTypes.get(name).properties.get(propertyName).valueSchema + "\n";
             }
+        }
+        schema += "    Association Rules: \n";
+        for (String rule : rules) {
+            schema += "        rule: " + rule + "\n";
         }
         return schema;
     }

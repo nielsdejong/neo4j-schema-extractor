@@ -29,11 +29,13 @@ public class NodeType {
     public Map<Entry<NodeType, EdgeType>, NumericDistribution> inDistributions;
 
     public Map<String, PropertyType> properties;
+    public List<AssociationRule> associationRules;
     
     public NodeType(String label) {
         this.label = label;
         this.nodeCount = 1;
         this.outDistributionCounter = new HashMap<>();
+        this.associationRules = new ArrayList<>();
         this.inDistributionCounter = new HashMap<>();
         this.inDistributions = new HashMap<>();
         this.outDistributions = new HashMap<>();

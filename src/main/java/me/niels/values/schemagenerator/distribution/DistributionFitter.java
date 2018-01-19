@@ -102,6 +102,7 @@ public class DistributionFitter {
                 valueCounts.put(value, 1.0);
             }
         }
+       // System.out.println(valueCounts);
         // Too few data points to fit a gaussian distribution
         if (valueCounts.keySet().size() < 3) {
             return new GaussianDistribution(Double.MAX_VALUE, Double.NaN, Double.NaN, Double.NaN);

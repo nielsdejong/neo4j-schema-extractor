@@ -26,21 +26,16 @@ import me.kevalmorabia97.RuleGeneration;
  */
 public class AssociationRuleGenerator {
 
-    public static void generate( List<List<String>> transactions, double minSup, double minConf ) {
+    public static List<String> generate( List<List<String>> transactions, double minSup, double minConf ) {
         try {
             int noOfChildsInHT = 4, maxItemsPerNodeInHT = 5;
-
-       
-
             Preprocess p = new Preprocess(transactions);
             FrequentItemsetGeneration f = new FrequentItemsetGeneration(noOfChildsInHT, maxItemsPerNodeInHT, minSup, p.noOfTransactions, p.noOfAttributes);
             RuleGeneration g = new RuleGeneration(f.freqK, f.maxLengthOfFreqItemsets, minSup, minConf, p.noOfTransactions, p.noToAttr);
-            for(String rule : g.rules){
-                System.out.println(rule);
-            }
-
+            return g.rules;
         } catch (IOException ex) {
             Logger.getLogger(AssociationRuleGenerator.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
     }
 }

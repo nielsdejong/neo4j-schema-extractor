@@ -5,7 +5,9 @@
  */
 package me.niels.schemagenerator.schema;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,8 +19,10 @@ public class EdgeType {
     public String label;
     public int edgeCount;
     public Map<String, PropertyType> properties;
-
+    public List<AssociationRule> associationRules;
+    
     public EdgeType(String type) {
+        this.associationRules = new ArrayList<>();
         this.label = type;
         this.edgeCount = 1;
         this.properties = new HashMap<>();

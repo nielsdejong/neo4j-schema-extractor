@@ -1,13 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.neo4j.example</groupId>
-    <artifactId>neo4j-movies</artifactId>
-    <version>3.0-SNAPSHOT</version>
+    <groupId>me.niels.schemagenerator</groupId>
+    <artifactId>schemagenerator</artifactId>
+    <version>0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Schema Extractor</name>
-    <description>Neo4j Movies Demo App</description>
-    <url>http://github.com/neo4j-examples/neo4j-movies-java-bolt</url>
+    <description>Property Graph SChema Extractor</description>
+    <url>http://github.com/nielsdejong/</url>
     <properties>
         <neo4j.version>3.0.4</neo4j.version>
     </properties>

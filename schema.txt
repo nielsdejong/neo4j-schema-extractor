@@ -1,0 +1,288 @@
+Schema: 
+    Node: Movie
+        fraction: 0.2040259513649847
+        outdistributions:
+        indistributions:
+            [Director-DIRECTED->Movie]: ZIPFIAN(alpha=3.670945619554678, xMin=8.0, testparameter=0.013054830287206266)
+            [Director-ACTS_IN->Movie]: ZIPFIAN(alpha=5.264654058302312, xMin=6.0, testparameter=0.18516302722105893)
+            [User-RATED->Movie]: ZIPFIAN(alpha=2.4426950408889634, xMin=2.0, testparameter=0.045454545454545456)
+            [Actor-ACTS_IN->Movie]: GAUSSIAN(norm=1015.9382747178306, mu=5.288962906656667, sigma=4.847939482048474, testparameter=0.22910286921033401
+        properties: 
+            studio
+                dist:UNIFORM(min=0.0, max=1.0, testparameter=0.5674856165448608)
+                class:String
+                valuedist:REGEX((?: Columbia Pictures(?: Corporation)?|# (?:# Jenkins Entertainment|Lexyn Productions|Riverside Pict)
+            releaseDate
+                dist:UNIFORM(min=0.0, max=1.0, testparameter=0.9806406468667392)
+                class:Long
+                valuedist:UNIFORM(min=-2.8811466E12, max=1.4199804E12, testparameter=0.516462667283801)
+            imdbId
+                dist:UNIFORM(min=0.0, max=1.0, testparameter=0.9731767998756026)
+                class:String
+                valuedist:REGEX(tt(?:0(?:0(?:0(?:0(?:0(?:0[1245]|1[02])|4(?:17|39|99))|1223|3740|4(?:026|972)|6(?:102|548|8(?:20|64))
+            runtime
+                dist:UNIFORM(min=0.0, max=1.0, testparameter=0.9829730990514695)
+                class:Long
+                valuedist:GAUSSIAN(norm=317.6281258547929, mu=96.77638860152848, sigma=12.669472018101704, testparameter=0.1254365383566154
+            description
+                dist:UNIFORM(min=1.0, max=1.0, testparameter=0.0)
+                class:String
+                valuedist:REGEX((?:	
+
+Robert Hansen, 34, a young police officer from Copenhagen, is transferred against his will to )
+            language
+                dist:UNIFORM(min=1.0, max=1.0, testparameter=0.0)
+                class:String
+                valuedist:ENUMDISTRIBUTION(['en': 1.0000000000001565] )
+            title
+                dist:UNIFORM(min=1.0, max=1.0, testparameter=0.0)
+                class:String
+                valuedist:REGEX((?:$9.99|'(?:Round Midnight|Weird Al' Yankovic\Q:\E (There's No) Going Home)|((?:500) Days of Summer)
+            version
+                dist:UNIFORM(min=1.0, max=1.0, testparameter=0.0)
+                class:Long
+                valuedist:GAUSSIAN(norm=63.32441898392824, mu=103.9953071609934, sigma=86.68834090859988, testparameter=0.17790525522118208
+            trailer
+                dist:UNIFORM(min=0.0, max=1.0, testparameter=0.7459182086767221)
+                class:String
+                valuedist:REGEX(http\Q:\E//www.youtube.com/watch\Q?\Ev\Q=\E(?:-(?:2(?:-NJ2HJEkQ|0yLzqRbc4|XlKqCTXFg)|5wPwGmvUz8|6j(?)
+            imageUrl
+                dist:UNIFORM(min=0.0, max=1.0, testparameter=0.8357176177888354)
+                class:String
+                valuedist:REGEX(http\Q:\E//cf1.imgobject.com/posters/(?:0(?:0(?:0/4d94991b7b9aa1199a002000/ying-hung-boon-sik-mid.jp)
+            genre
+                dist:UNIFORM(min=0.0, max=1.0, testparameter=0.9104338361063599)
+                class:String
+                valuedist:ENUMDISTRIBUTION(['Action': 0.20990606319384095] ['Disaster': 0.0011101622544833476] ['War': 5.977796754910333E-4] ['Suspense': 0.0016225448334756618] ['History': 0.005977796754910332] ['Science Fiction': 0.00973526900085398] ['Road Movie': 0.0012809564474807857] ['Western': 0.0031596925704526074] ['Documentary': 0.04560204953031624] ['Thriller': 0.01221178479931685] ['Comedy': 0.2722459436379085] ['Mystery': 0.0032450896669513267] ['Musical': 0.004782237403928268] ['Sporting Event': 8.539709649871905E-5] ['Film Noir': 2.5619128949615715E-4] ['Short': 1.707941929974381E-4] ['British': 8.539709649871905E-5] ['Adventure': 0.026643894107600475] ['Indie': 0.0011101622544833476] ['Horror': 0.052690008539709975] ['Romance': 0.0015371477369769428] ['Sports Film': 0.006917164816396239] ['Drama': 0.2297181895815423] ['Erotic': 0.004611443210930831] ['Music': 0.002049530315969257] ['Crime': 0.0506404782237407] ['Fantasy': 0.007685738684884708] ['Animation': 0.036379163108454515] ['Family': 0.006404782237403926] ['Eastern': 0.0015371477369769428] )
+            tagline
+                dist:UNIFORM(min=1.0, max=1.0, testparameter=0.0)
+                class:String
+                valuedist:REGEX((?:"(?:88 Minutes" focuses on a college professor (Pacino) who moonlights as a forensic psychiatrist)
+            lastModified
+                dist:UNIFORM(min=1.0, max=1.0, testparameter=0.0)
+                class:Long
+                valuedist:GAUSSIAN(norm=1.7862205566291312, mu=1.3017118107833328E12, sigma=1.5098434664416714E9, testparameter=0.40540525745215605
+            id
+                dist:UNIFORM(min=1.0, max=1.0, testparameter=0.0)
+                class:Long
+                valuedist:UNIFORM(min=2.0, max=20526.0, testparameter=0.08047366129169753)
+            homepage
+                dist:UNIFORM(min=1.0, max=1.0, testparameter=0.0)
+                class:String
+                valuedist:REGEX((?:    www.kleinesarschloch2.de|8[15]|A card cheat was hung... then all hell broke loose!|HTTP\Q:\E/)
+    Node: User
+        fraction: 7.138211640043781E-4
+        outdistributions:
+            [User-FRIEND->User]: ZIPFIAN(alpha=2.674331879653742, xMin=1.0, testparameter=0.3333333333333333)
+            [User-RATED->Movie]: ZIPFIAN(alpha=7.1657586559410795, xMin=2.0, testparameter=0.21739130434782608)
+        indistributions:
+            [User-FRIEND->User]: ZIPFIAN(alpha=8.213475204444817, xMin=1.0, testparameter=0.0)
+        properties: 
+            password
+                dist:UNIFORM(min=1.0, max=1.0, testparameter=0.0)
+                class:String
+                valuedist:REGEX((?:0(?:5729bf9b8fb4b12a53f52f39e0b9ba5|70dd3db4286e6565de3224092fbf606|869be23594fdb98128fbfd6d7ff22)
+            roles
+                dist:UNIFORM(min=1.0, max=1.0, testparameter=0.0)
+                class:String
+                valuedist:ENUMDISTRIBUTION(['ROLE_USER': 1.0000000000000004] )
+            name
+                dist:UNIFORM(min=1.0, max=1.0, testparameter=0.0)
+                class:String
+                valuedist:REGEX((?:111|A(?:dil|gelos Pikoulas)|Caton|Emil Eifrem|Hush|Jo(?:rge Guerrero|seph)|Mahesh|Olliver|Patrick)
+            login
+                dist:UNIFORM(min=1.0, max=1.0, testparameter=0.0)
+                class:String
+                valuedist:REGEX((?:111|Hush|Sangreal|a(?:999|dil(?:.fulara\Q@\Egmail.com|fulara)|ltairon|nodynos)|coco|d(?:euz|harmk)
+    Node: Actor
+        fraction: 0.6994971526466902
+        outdistributions:
+            [Actor-ACTS_IN->Movie]: ZIPFIAN(alpha=5.467072957329804, xMin=24.0, testparameter=0.2796788897203891)
+        indistributions:
+        properties: 
+            birthday
+                dist:UNIFORM(min=0.0, max=1.0, testparameter=0.9714039503821121)
+                class:Long
+                valuedist:UNIFORM(min=-3.4433028E12, max=1.3046328E12, testparameter=0.26569467971485766)
+            birthplace
+                dist:UNIFORM(min=0.0, max=1.0, testparameter=0.6869628319386807)
+                class:String
+                valuedist:REGEX((?: (?: Minneapolis, Minnesota, United States|Burchard, Nebraska USA|Landstuhl, West Germany|Torranc)
+            name
+                dist:UNIFORM(min=1.0, max=1.0, testparameter=0.0)
+                class:String
+                valuedist:REGEX((?: Edyta Olszówka|'(?:Big Jack' Provan|Cousin Brucie' Morrow|Evil' Ted Smith|Weird Al' Yankovic)|10)
+            lastModified
+                dist:UNIFORM(min=1.0, max=1.0, testparameter=0.0)
+                class:Long
+                valuedist:GAUSSIAN(norm=44.08491324538171, mu=1.30123687585626E12, sigma=4.5512629784821457E8, testparameter=0.7491395637111098
+            id
+                dist:UNIFORM(min=1.0, max=1.0, testparameter=0.0)
+                class:Long
+                valuedist:GAUSSIAN(norm=1.0003832399232697, mu=113933.16876835126, sigma=3343615.7587225214, testparameter=0.48914011945993463
+            biography
+                dist:UNIFORM(min=1.0, max=1.0, testparameter=0.0)
+                class:String
+                valuedist:REGEX((?:1(?: Kas?m 1958'de Bursa'da do?du. 1975 y?l?nda Bursa Devlet Tiyatrosu, Ahmed Vefik Pa?a sahnesin)
+            version
+                dist:UNIFORM(min=1.0, max=1.0, testparameter=0.0)
+                class:Long
+                valuedist:GAUSSIAN(norm=5247.961772444251, mu=19.99990872756859, sigma=2.4531954438845958, testparameter=0.2668977919020743
+            profileImageUrl
+                dist:UNIFORM(min=0.0, max=1.0, testparameter=0.8675420096605211)
+                class:String
+                valuedist:REGEX(http\Q:\E//cf1.imgobject.com/profiles/(?:0(?:0(?:0/4c(?:740a767b9aa13ab7001000/diane-ladd-profile.jp)
+    Node: Director
+        fraction: 0.09576307482432068
+        outdistributions:
+            [Director-DIRECTED->Movie]: ZIPFIAN(alpha=6.597059025322569, xMin=22.0, testparameter=0.3208547291701176)
+            [Director-ACTS_IN->Movie]: ZIPFIAN(alpha=5.163764463345236, xMin=26.0, testparameter=0.4858156028368794)
+        indistributions:
+        properties: 
+            birthday
+                dist:UNIFORM(min=0.0, max=1.0, testparameter=0.9720059632267682)
+                class:Long
+                valuedist:UNIFORM(min=-3.4102116E12, max=1.2918492E12, testparameter=0.192419137839966)
+            birthplace
+                dist:UNIFORM(min=0.0, max=1.0, testparameter=0.696703660758655)
+                class:String
+                valuedist:REGEX((?:A(?:gen|msterdam, Noord-Holland, Netherlands|nd(?:erson, Indiana, USA|rews, South Carolina)|sakus)
+            name
+                dist:UNIFORM(min=1.0, max=1.0, testparameter=0.0)
+                class:String
+                valuedist:REGEX((?: Morio Asaka|A(?:.(?: Ides|R. Murugadoss)|a(?:mir Khan|ron (?:Blaise|Norris|Russo|Seltzer|Woolf)))
+            lastModified
+                dist:UNIFORM(min=1.0, max=1.0, testparameter=0.0)
+                class:Long
+                valuedist:GAUSSIAN(norm=6.494130585802619, mu=1.301166080351971E12, sigma=6.315573209518979E8, testparameter=0.735619797047375
+            id
+                dist:UNIFORM(min=1.0, max=1.0, testparameter=0.0)
+                class:Long
+                valuedist:GAUSSIAN(norm=1.0006895856634486, mu=81595.8000295191, sigma=2345918.2993259914, testparameter=0.48612694503494164
+            biography
+                dist:UNIFORM(min=1.0, max=1.0, testparameter=0.0)
+                class:String
+                valuedist:REGEX((?:\Q<\E(?:!--(?:StartFragment--\Q>\E
+
+\Q<\Espan lang\Q=\E"EN-US" style\Q=\E"mso-bidi-font-family\Q:)
+            version
+                dist:UNIFORM(min=1.0, max=1.0, testparameter=0.0)
+                class:Long
+                valuedist:GAUSSIAN(norm=466.3119748695609, mu=21.353794422989566, sigma=3.4261386495274158, testparameter=0.35731176753845884
+            profileImageUrl
+                dist:UNIFORM(min=0.0, max=1.0, testparameter=0.9254596653967202)
+                class:String
+                valuedist:REGEX(http\Q:\E//cf1.imgobject.com/profiles/(?:0(?:0(?:2/4bcb5930017a3c2dc4000002/sam-peckinpah-profile.jp)
+    Edge: ACTS_IN
+        fraction: 0.887942916615878
+        properties: 
+            name
+                dist:UNIFORM(min=1.0, max=1.0, testparameter=0.0)
+                class:String
+                valuedist:REGEX((?:"(?:B(?:ella" Anna Wittstock|ones" Malone)|C(?:arreys Frau"|hew Fat Lip")|G(?:erman"|")|La doublu)
+    Edge: RATED
+        fraction: 2.8129131466184094E-4
+        properties: 
+            comment
+                dist:UNIFORM(min=0.0, max=1.0, testparameter=0.8)
+                class:String
+                valuedist:REGEX((?:\Q:\E)|A(?: hell of an movie!|mazing movie|wesome !!)|Cooooool!!!!|Don't believe what everyone sa)
+            stars
+                dist:UNIFORM(min=1.0, max=1.0, testparameter=0.0)
+                class:Long
+                valuedist:GAUSSIAN(norm=15.851698523419051, mu=4.69184404071514, sigma=0.9272182825669468, testparameter=0.36981454518510937
+    Edge: FRIEND
+        fraction: 5.625826293236819E-5
+        properties: 
+    Edge: DIRECTED
+        fraction: 0.11171953380652784
+        properties: 
+    Association Rules: 
+        rule: Movie.version=131.6488879108421-162.50993727430674, (1701) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.8559671)
+        rule: Movie.genre=Comedy, (3188) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.8836261)
+        rule: Movie.genre=Action, (2458) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.8612693)
+        rule: Movie.runtime=105.32828221375568-111.35895089437297, (1082) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.8650647)
+        rule: Movie.genre=Drama, (2690) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.84126395)
+        rule: Movie.runtime=92.74749649977888-96.7890580735539, (1363) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.8877476)
+        rule: Movie.runtime=46.098500529121665-82.20649578071674, (2185) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.77894735)
+        rule: Movie.id=10264.0-12829.5, (2144) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.9720149)
+        rule: Movie.releaseDate=-1.92942225E11-3.4469865E11, (1486) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.8667564)
+        rule: Movie.genre=Action, (2458) ----> Movie.releaseDate=8.82339525E11-1.4199804E12, (6839) conf(0.5113914)
+        rule: Movie.runtime=96.7890580735539-100.81795017531083, (1224) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.877451)
+        rule: Movie.id=17960.5-20526.0, (1381) ----> Movie.releaseDate=8.82339525E11-1.4199804E12, (6839) conf(0.54598117)
+        rule: Movie.version=162.50993727430674-203.7735875468044, (1615) ----> Movie.releaseDate=8.82339525E11-1.4199804E12, (6839) conf(0.6198142)
+        rule: Movie.genre=Comedy, (3188) ----> Movie.releaseDate=8.82339525E11-1.4199804E12, (6839) conf(0.53293604)
+        rule: Movie.id=2567.5-5133.0, (1288) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.9200311)
+        rule: Movie.version=131.6488879108421-162.50993727430674, (1701) ----> Movie.releaseDate=8.82339525E11-1.4199804E12, (6839) conf(0.553204)
+        rule: Movie.id=17960.5-20526.0, (1381) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.77407676)
+        rule: Movie.genre=Drama, (2690) ----> Movie.releaseDate=8.82339525E11-1.4199804E12, (6839) conf(0.56579924)
+        rule: Movie.runtime=96.7890580735539-100.81795017531083, (1224) ----> Movie.releaseDate=8.82339525E11-1.4199804E12, (6839) conf(0.54493463)
+        rule: Movie.version=4.3037151161117375-45.567365388605786, (1131) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.7152962)
+        rule: Movie.runtime=82.20649578071674-88.23716446133402, (1150) ----> Movie.releaseDate=8.82339525E11-1.4199804E12, (6839) conf(0.5747826)
+        rule: Movie.id=12829.5-15395.0, (1872) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.9102564)
+        rule: Movie.id=15395.0-17960.5, (1752) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.8184931)
+        rule: Movie.version=76.42841475206689-104.08199550190848, (1750) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.8582857)
+        rule: Movie.id=7698.5-10264.0, (1591) ----> Movie.releaseDate=8.82339525E11-1.4199804E12, (6839) conf(0.6033941)
+        rule: Movie.runtime=46.098500529121665-82.20649578071674, (2185) ----> Movie.releaseDate=8.82339525E11-1.4199804E12, (6839) conf(0.5286041)
+        rule: Movie.id=5133.0-7698.5, (1006) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.9383698)
+        rule: Movie.runtime=92.74749649977888-96.7890580735539, (1363) ----> Movie.releaseDate=8.82339525E11-1.4199804E12, (6839) conf(0.5685987)
+        rule: Movie.runtime=82.20649578071674-88.23716446133402, (1150) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.8826087)
+        rule: Movie.runtime=88.23716446133402-92.74749649977888, (1588) ----> Movie.releaseDate=8.82339525E11-1.4199804E12, (6839) conf(0.5824937)
+        rule: Movie.releaseDate=3.4469865E11-8.82339525E11, (2812) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.8616643)
+        rule: Movie.version=162.50993727430674-203.7735875468044, (1615) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.85263157)
+        rule: Movie.runtime=88.23716446133402-92.74749649977888, (1588) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.8803526)
+        rule: Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) ----> Movie.releaseDate=8.82339525E11-1.4199804E12, (6839) conf(0.54080504)
+        rule: Movie.releaseDate=8.82339525E11-1.4199804E12, (6839) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.85655797)
+        rule: Movie.version=104.08199550190848-131.6488879108421, (1567) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.83407784)
+        rule: Movie.version=45.567365388605786-76.42841475206689, (2144) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.8484142)
+        rule: Movie.id=7698.5-10264.0, (1591) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.97423005)
+        rule: Movie.id=12829.5-15395.0, (1872) ----> Movie.releaseDate=8.82339525E11-1.4199804E12, (6839) conf(0.7136752)
+        rule: Movie.runtime=100.81795017531083-105.32828221375568, (1134) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.8747795)
+        rule: Movie.id=15395.0-17960.5, (1752) ----> Movie.releaseDate=8.82339525E11-1.4199804E12, (6839) conf(0.6210046)
+        rule: Movie.releaseDate=3.4469865E11-8.82339525E11, Movie.id=10264.0-12829.5, (690) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.9927536)
+        rule: Movie.genre=Drama, Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (2263) ----> Movie.releaseDate=8.82339525E11-1.4199804E12, (6839) conf(0.5779938)
+        rule: Movie.releaseDate=8.82339525E11-1.4199804E12, Movie.genre=Drama, (1522) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.8593955)
+        rule: Movie.version=131.6488879108421-162.50993727430674, Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (1456) ----> Movie.releaseDate=8.82339525E11-1.4199804E12, (6839) conf(0.56112635)
+        rule: Movie.releaseDate=8.82339525E11-1.4199804E12, Movie.version=131.6488879108421-162.50993727430674, (941) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.8682253)
+        rule: Movie.genre=Comedy, Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (2817) ----> Movie.releaseDate=8.82339525E11-1.4199804E12, (6839) conf(0.5349663)
+        rule: Movie.releaseDate=8.82339525E11-1.4199804E12, Movie.genre=Comedy, (1699) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.88699234)
+        rule: Movie.version=162.50993727430674-203.7735875468044, Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (1377) ----> Movie.releaseDate=8.82339525E11-1.4199804E12, (6839) conf(0.6456064)
+        rule: Movie.releaseDate=8.82339525E11-1.4199804E12, Movie.version=162.50993727430674-203.7735875468044, (1001) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.8881119)
+        rule: Movie.version=162.50993727430674-203.7735875468044, (1615) ----> Movie.releaseDate=8.82339525E11-1.4199804E12, Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (5858) conf(0.5504644)
+        rule: Movie.genre=Comedy, Movie.releaseDate=3.4469865E11-8.82339525E11, (823) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.9040097)
+        rule: Movie.genre=Action, Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (2117) ----> Movie.releaseDate=8.82339525E11-1.4199804E12, (6839) conf(0.5196032)
+        rule: Movie.releaseDate=8.82339525E11-1.4199804E12, Movie.genre=Action, (1257) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.8750994)
+        rule: Movie.runtime=88.23716446133402-92.74749649977888, Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (1398) ----> Movie.releaseDate=8.82339525E11-1.4199804E12, (6839) conf(0.5872675)
+        rule: Movie.releaseDate=8.82339525E11-1.4199804E12, Movie.runtime=88.23716446133402-92.74749649977888, (925) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.8875676)
+        rule: Movie.runtime=88.23716446133402-92.74749649977888, (1588) ----> Movie.releaseDate=8.82339525E11-1.4199804E12, Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (5858) conf(0.5170025)
+        rule: Movie.runtime=92.74749649977888-96.7890580735539, Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (1210) ----> Movie.releaseDate=8.82339525E11-1.4199804E12, (6839) conf(0.56694216)
+        rule: Movie.releaseDate=8.82339525E11-1.4199804E12, Movie.runtime=92.74749649977888-96.7890580735539, (775) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.8851613)
+        rule: Movie.runtime=92.74749649977888-96.7890580735539, (1363) ----> Movie.releaseDate=8.82339525E11-1.4199804E12, Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (5858) conf(0.50330156)
+        rule: Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, Movie.id=12829.5-15395.0, (1704) ----> Movie.releaseDate=8.82339525E11-1.4199804E12, (6839) conf(0.73122066)
+        rule: Movie.releaseDate=8.82339525E11-1.4199804E12, Movie.id=12829.5-15395.0, (1336) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.9326347)
+        rule: Movie.id=12829.5-15395.0, (1872) ----> Movie.releaseDate=8.82339525E11-1.4199804E12, Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (5858) conf(0.6655983)
+        rule: Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, Movie.id=15395.0-17960.5, (1434) ----> Movie.releaseDate=8.82339525E11-1.4199804E12, (6839) conf(0.62552303)
+        rule: Movie.releaseDate=8.82339525E11-1.4199804E12, Movie.id=15395.0-17960.5, (1088) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.8244485)
+        rule: Movie.id=15395.0-17960.5, (1752) ----> Movie.releaseDate=8.82339525E11-1.4199804E12, Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (5858) conf(0.5119863)
+        rule: Movie.releaseDate=8.82339525E11-1.4199804E12, Movie.version=45.567365388605786-76.42841475206689, (1013) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.8410661)
+        rule: Movie.releaseDate=8.82339525E11-1.4199804E12, Movie.version=76.42841475206689-104.08199550190848, (795) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.87169814)
+        rule: Movie.runtime=46.098500529121665-82.20649578071674, Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (1702) ----> Movie.releaseDate=8.82339525E11-1.4199804E12, (6839) conf(0.55111635)
+        rule: Movie.releaseDate=8.82339525E11-1.4199804E12, Movie.runtime=46.098500529121665-82.20649578071674, (1155) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.8121212)
+        rule: Movie.id=7698.5-10264.0, Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (1550) ----> Movie.releaseDate=8.82339525E11-1.4199804E12, (6839) conf(0.60451615)
+        rule: Movie.releaseDate=8.82339525E11-1.4199804E12, Movie.id=7698.5-10264.0, (960) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.9760417)
+        rule: Movie.id=7698.5-10264.0, (1591) ----> Movie.releaseDate=8.82339525E11-1.4199804E12, Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (5858) conf(0.58893776)
+        rule: Movie.releaseDate=8.82339525E11-1.4199804E12, Movie.id=10264.0-12829.5, (1017) ----> Movie.lastModified=1.3017133206272437E12-1.3021934508496074E12, (10832) conf(0.9705015)
+        rule: Actor.lastModified=1.2994163706648672E12-1.3007134806137441E12, (7854) ----> Actor.id=-949336.6425050201-117276.78452746657, (41663) conf(0.98892283)
+        rule: Actor.version=20.782478074166182-21.655815652188966, (3952) ----> Actor.id=-949336.6425050201-117276.78452746657, (41663) conf(0.95167005)
+        rule: Actor.version=19.21979257641193-20.002361923010998, (6581) ----> Actor.id=-949336.6425050201-117276.78452746657, (41663) conf(0.96231574)
+        rule: Actor.version=18.346454998389145-19.21979257641193, (6286) ----> Actor.id=-949336.6425050201-117276.78452746657, (41663) conf(0.97709197)
+        rule: Actor.version=10.187126952030209-17.178733967100253, (6221) ----> Actor.id=-949336.6425050201-117276.78452746657, (41663) conf(0.8300916)
+        rule: Actor.version=21.655815652188966-22.823536683477858, (2940) ----> Actor.id=-949336.6425050201-117276.78452746657, (41663) conf(0.95646256)
+        rule: Actor.id=-949336.6425050201-117276.78452746657, Actor.version=10.187126952030209-17.178733967100253, (5164) ----> Actor.lastModified=1.2994163706648672E12-1.3007134806137441E12, (7854) conf(0.50697136)
+        rule: Actor.lastModified=1.2994163706648672E12-1.3007134806137441E12, Actor.version=10.187126952030209-17.178733967100253, (2670) ----> Actor.id=-949336.6425050201-117276.78452746657, (41663) conf(0.98052436)
+        rule: Director.lastModified=1.2986398510681633E12-1.3004397894331414E12, (853) ----> Director.id=-664406.2191561435-83941.71832884548, (5291) conf(0.992966)
+        rule: Director.version=20.264282332437222-21.357220561636233, (550) ----> Director.id=-664406.2191561435-83941.71832884548, (5291) conf(0.8709091)
+        rule: Director.version=19.044576973205725-20.264282332437222, (667) ----> Director.id=-664406.2191561435-83941.71832884548, (5291) conf(0.8605697)
+        rule: Director.version=17.413734976031026-19.044576973205725, (545) ----> Director.id=-664406.2191561435-83941.71832884548, (5291) conf(0.7706422)
+        rule: Director.version=23.666438011417213-25.297280008591912, (512) ----> Director.id=-664406.2191561435-83941.71832884548, (5291) conf(0.90625)
+        rule: Director.version=21.357220561636233-22.446732652185716, (365) ----> Director.id=-664406.2191561435-83941.71832884548, (5291) conf(0.84109586)

@@ -1,19 +1,23 @@
 package me.niels.schemagenerator;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.AbstractMap;
 import me.niels.values.schemagenerator.distribution.DistributionFitter;
 import me.niels.schemagenerator.schema.EdgeType;
 import me.niels.schemagenerator.schema.NodeType;
 import me.niels.schemagenerator.graph.Edge;
-import org.apache.commons.math3.stat.descriptive.rank.Percentile;
 import me.niels.schemagenerator.graph.Node;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import me.geso.regexp_trie.RegexpTrie;
 import me.niels.values.schemagenerator.distribution.NumericDistribution;
 import me.niels.schemagenerator.graph.Graph;
@@ -26,7 +30,6 @@ import me.niels.values.schemagenerator.distribution.GaussianDistribution;
 import me.niels.values.schemagenerator.distribution.UniformDistribution;
 import me.niels.values.schemagenerator.distribution.ZipfianDistribution;
 import me.niels.values.schemagenerator.regex.RegularExpression;
-import org.apache.commons.math3.distribution.ZipfDistribution;
 
 public class SchemaGenerator {
 
@@ -42,13 +45,34 @@ public class SchemaGenerator {
     public Schema schema;
 
     public static void main(String[] args) {
+        // Get dbURL from arguments.
+        String dbURL;
+        if (args.length == 0) {
+            dbURL = "bolt://neo4j:1234@localhost";
+        } else {
+            dbURL = args[0];
+        }
 
-        String dbURL = "bolt://neo4j:1234@localhost";
+        // Generate Schema.
         SchemaGenerator gen = new SchemaGenerator(dbURL);
         Long startTime = System.currentTimeMillis();
+        System.out.println("Started Schema generation for database at " + dbURL + "...");
         gen.generateSchema();
-        System.out.println("Schema generated. Total execution time: " + (System.currentTimeMillis() - startTime) + " ms");
-        System.out.println(gen.schema);
+
+        // Write to file.
+        File file = new File("schema.txt");
+        FileWriter fileWriter;
+        BufferedWriter writer;
+        
+        try {
+            fileWriter = new FileWriter(file);
+            writer = new BufferedWriter(fileWriter);
+            writer.write(gen.schema.toString());
+            writer.close();
+        } catch (IOException ex) {
+            Logger.getLogger(SchemaGenerator.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println("Schema written to '"+file.getAbsolutePath()+"'. Total execution time: " + (System.currentTimeMillis() - startTime) + " ms");
     }
 
     private SchemaGenerator(String dbURL) {
@@ -60,15 +84,21 @@ public class SchemaGenerator {
     private void generateSchema() {
 
         // Load basic graph information from Neo4J database.
+        System.out.println("Processing graph data...");
         dataLoader.loadNodeData(graph.nodes, schema.nodeTypes);
         dataLoader.loadEdgeData(graph.edges, schema.edgeTypes);
         dataLoader.loadStructureData(graph.nodes, graph.edges);
         schema.totalNodeCount = graph.nodes.size();
         schema.totalEdgeCount = graph.edges.size();
+
+        System.out.println("Total nodes: " + graph.nodes.size() + ", total edges: " + graph.edges.size());
+        System.out.println("Computing node degree distributions...");
         // Count the number of in/outgoing edges for each node type.
         countEdgeDistributions();
         // Use these counts to determine what the distribution of edges is.
         computeEdgeDistributions();
+
+        System.out.println("Generating Property Schema...");
         // Find property types for each node type.
         findPropertyTypes();
         // Count the number of values for each property.
@@ -79,6 +109,8 @@ public class SchemaGenerator {
         findPropertyValueClasses();
         // Determine Property Value distributions
         computePropertyValueSchemas();
+
+        System.out.println("Generating Association Rules...");
         // Determine Property Value Relationships
         computeAssociationRules();
     }
@@ -131,6 +163,7 @@ public class SchemaGenerator {
                 // Find a distribution based on the number of outgoing edges of
                 // each node of this type.
                 List<Integer> values = type.outDistributionCounter.get(key);
+                //System.out.println(type + "," + key);
                 NumericDistribution distribution = DistributionFitter.fitIntegerList(values);
                 schema.nodeTypes.get(label).outDistributions.put(key, distribution);
             }
@@ -138,6 +171,7 @@ public class SchemaGenerator {
                 // Find a distribution based on the number of outgoing edges of
                 // each node of this type.
                 List<Integer> values = type.inDistributionCounter.get(key);
+                //System.out.println(key + "," + type);
                 NumericDistribution distribution = DistributionFitter.fitIntegerList(values);
                 schema.nodeTypes.get(label).inDistributions.put(key, distribution);
             }
@@ -145,6 +179,7 @@ public class SchemaGenerator {
     }
 
     private void findPropertyTypes() {
+
         for (Node n : graph.nodes.values()) {
             NodeType type = schema.nodeTypes.get(n.type.label);
             for (Property p : n.properties) {
@@ -180,11 +215,15 @@ public class SchemaGenerator {
 
     private void countPropertyDistribution(PropertyType pType, List<Property> properties) {
         int count = 0;
+
         for (Property p : properties) {
             if (p.name.equals(pType.name)) {
-                if (p.values.getClass().equals(Set.class)) {
+                if (p.values.getClass().equals(Set.class
+                )) {
                     count = ((Set) p.values).size();
-                } else if (p.values.getClass().equals(List.class)) {
+
+                } else if (p.values.getClass().equals(List.class
+                )) {
                     count = ((List) p.values).size();
                 } else {
                     count = 1;
@@ -345,7 +384,6 @@ public class SchemaGenerator {
     }
 
     private void computeAssociationRules() {
-
         for (NodeType nType : schema.nodeTypes.values()) {
             List<List<String>> training_data = new ArrayList<List<String>>();
             for (Node n : graph.nodes.values()) {
@@ -354,7 +392,8 @@ public class SchemaGenerator {
                 }
                 training_data.add(convertPropertiesToItemSet(n.type.label, true, n.properties));
             }
-            AssociationRuleGenerator.generate(training_data, RULE_MIN_SUPPORT, RULE_MIN_CONFIDENCE);
+            List<String> rules = AssociationRuleGenerator.generate(training_data, RULE_MIN_SUPPORT, RULE_MIN_CONFIDENCE);
+            schema.rules.addAll(rules);
         }
         for (EdgeType eType : schema.edgeTypes.values()) {
             List<List<String>> training_data = new ArrayList<List<String>>();
@@ -364,35 +403,45 @@ public class SchemaGenerator {
                 }
                 training_data.add(convertPropertiesToItemSet(e.type.label, false, e.properties));
             }
-            AssociationRuleGenerator.generate(training_data, RULE_MIN_SUPPORT, RULE_MIN_CONFIDENCE);
+            List<String> rules = AssociationRuleGenerator.generate(training_data, RULE_MIN_SUPPORT, RULE_MIN_CONFIDENCE);
+            schema.rules.addAll(rules);
         }
     }
 
     private List<String> convertPropertiesToItemSet(String label, boolean isNode, List<Property> properties) {
         List<String> entry = new ArrayList<>();
         for (Property p : properties) {
-         
+
             ValueSchema pValueSchema;
             if (isNode) {
                 pValueSchema = schema.nodeTypes.get(label).properties.get(p.name).valueSchema;
             } else {
                 pValueSchema = schema.edgeTypes.get(label).properties.get(p.name).valueSchema;
+
             }
 
-            if (pValueSchema.getClass() == UniformDistribution.class || pValueSchema.getClass() == ZipfianDistribution.class || pValueSchema.getClass() == GaussianDistribution.class) {
+            if (pValueSchema.getClass() == UniformDistribution.class
+                    || pValueSchema.getClass() == ZipfianDistribution.class
+                    || pValueSchema.getClass() == GaussianDistribution.class) {
                 // Numeric Distribution
                 NumericDistribution distribution = (NumericDistribution) pValueSchema;
                 List<Double> bucketLimits = new ArrayList<>();
-                if (distribution.getClass().equals(UniformDistribution.class)) {
+
+                if (distribution.getClass().equals(UniformDistribution.class
+                )) {
                     bucketLimits = ((UniformDistribution) distribution).getBins(RULE_MINING_BINS);
-                } else if (distribution.getClass().equals(GaussianDistribution.class)) {
+
+                } else if (distribution.getClass().equals(GaussianDistribution.class
+                )) {
                     bucketLimits = ((GaussianDistribution) distribution).getBins(RULE_MINING_BINS);
                 } else {
                     bucketLimits = ((ZipfianDistribution) distribution).getBins(RULE_MINING_BINS, graph.nodes.size());
                 }
                 double value;
+
                 if (p.values.getClass() == String.class) {
                     value = Double.parseDouble((String) p.values);
+
                 } else if (p.values.getClass() == Long.class) {
                     value = (Long) p.values;
                 } else {
@@ -403,6 +452,7 @@ public class SchemaGenerator {
                     if (value < bucketLimits.get(i)) {
                         entry.add(label + "." + p.name + "=" + bucketLimits.get(i - 1) + "-" + bucketLimits.get(i));
                         break;
+
                     }
                 }
 
@@ -414,7 +464,7 @@ public class SchemaGenerator {
                 }
                 entry.add(label + "." + p.name + "=" + p.values);
             } else {
-                // Regex
+                // TODO: Implement Regex Binning
             }
         }
         return entry;
