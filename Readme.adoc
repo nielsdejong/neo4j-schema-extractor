@@ -1,5 +1,6 @@
 == Neo4j Property Graph Schema Extractor
 This code accompanies my research on defining a methodology for the extraction of a schema from a property graph. For a detailed explanation, find the related paper here (link). 
+
 === How to execute the schema extractor:
 - Start a local Neo4j Server (http://neo4j.com/download[Download & Install]).
 - Execute the jar file from the command line or an IDE:
