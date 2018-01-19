@@ -1,5 +1,11 @@
 == Neo4j Property Graph Schema Extractor
-This code accompanies my research on defining a methodology for the extraction of a schema from a property graph. For a detailed explanation, find the related paper here (link). 
+This code accompanies my research on defining a methodology for the extraction of a schema from a property graph. For a detailed explanation, find the related paper here (link). The property graph schema extractor consists of the following components:
+
+- A node/edge type identifier & counter.
+- Fitting of node degree distributions to a uniform, Gaussian & Zipfian distribution and goodness-of-fit testing.
+- Property occurance distribution fitting.
+- Property value distribution identification. 
+- Association rule mining on properties on the same element using property value ranges.
 
 === How to execute the schema extractor:
 - Start a local Neo4j Server (http://neo4j.com/download[Download & Install]).
