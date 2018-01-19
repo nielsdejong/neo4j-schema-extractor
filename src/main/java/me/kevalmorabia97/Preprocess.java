@@ -24,8 +24,7 @@ public class Preprocess {
     }
 
     public void preprocess(List<List<String>> items) throws IOException {
-
-        BufferedWriter bw = new BufferedWriter(new FileWriter("data/ProcessedTransaction.txt"));
+        BufferedWriter bw = new BufferedWriter(new FileWriter("data/bins.txt"));
 
         for (List<String> entry : items) {
             String s = "";

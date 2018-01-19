@@ -3,8 +3,8 @@ Schema:
         fraction: 0.2040259513649847
         outdistributions:
         indistributions:
-            [Director-DIRECTED->Movie]: ZIPFIAN(alpha=3.670945619554678, xMin=8.0, testparameter=0.013054830287206266)
-            [Director-ACTS_IN->Movie]: ZIPFIAN(alpha=5.264654058302312, xMin=6.0, testparameter=0.18516302722105893)
+            [Director-DIRECTED->Movie]: ZIPFIAN(alpha=3.670945619554678, xMin=8.0, testparameter=0.014360313315926894)
+            [Director-ACTS_IN->Movie]: ZIPFIAN(alpha=5.264654058302312, xMin=6.0, testparameter=0.19114567753514808)
             [User-RATED->Movie]: ZIPFIAN(alpha=2.4426950408889634, xMin=2.0, testparameter=0.045454545454545456)
             [Actor-ACTS_IN->Movie]: GAUSSIAN(norm=1015.9382747178306, mu=5.288962906656667, sigma=4.847939482048474, testparameter=0.22910286921033401
         properties: 
@@ -73,10 +73,10 @@ Robert Hansen, 34, a young police officer from Copenhagen, is transferred agains
     Node: User
         fraction: 7.138211640043781E-4
         outdistributions:
-            [User-FRIEND->User]: ZIPFIAN(alpha=2.674331879653742, xMin=1.0, testparameter=0.3333333333333333)
+            [User-FRIEND->User]: ZIPFIAN(alpha=2.674331879653742, xMin=1.0, testparameter=0.0)
             [User-RATED->Movie]: ZIPFIAN(alpha=7.1657586559410795, xMin=2.0, testparameter=0.21739130434782608)
         indistributions:
-            [User-FRIEND->User]: ZIPFIAN(alpha=8.213475204444817, xMin=1.0, testparameter=0.0)
+            [User-FRIEND->User]: ZIPFIAN(alpha=8.213475204444817, xMin=1.0, testparameter=0.2)
         properties: 
             password
                 dist:UNIFORM(min=1.0, max=1.0, testparameter=0.0)
@@ -97,7 +97,7 @@ Robert Hansen, 34, a young police officer from Copenhagen, is transferred agains
     Node: Actor
         fraction: 0.6994971526466902
         outdistributions:
-            [Actor-ACTS_IN->Movie]: ZIPFIAN(alpha=5.467072957329804, xMin=24.0, testparameter=0.2796788897203891)
+            [Actor-ACTS_IN->Movie]: ZIPFIAN(alpha=5.467072957329804, xMin=24.0, testparameter=0.2778420300700728)
         indistributions:
         properties: 
             birthday
@@ -135,8 +135,8 @@ Robert Hansen, 34, a young police officer from Copenhagen, is transferred agains
     Node: Director
         fraction: 0.09576307482432068
         outdistributions:
-            [Director-DIRECTED->Movie]: ZIPFIAN(alpha=6.597059025322569, xMin=22.0, testparameter=0.3208547291701176)
-            [Director-ACTS_IN->Movie]: ZIPFIAN(alpha=5.163764463345236, xMin=26.0, testparameter=0.4858156028368794)
+            [Director-DIRECTED->Movie]: ZIPFIAN(alpha=6.597059025322569, xMin=22.0, testparameter=0.32035779360609573)
+            [Director-ACTS_IN->Movie]: ZIPFIAN(alpha=5.163764463345236, xMin=26.0, testparameter=0.4905437352245863)
         indistributions:
         properties: 
             birthday

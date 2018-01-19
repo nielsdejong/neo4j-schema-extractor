@@ -66,7 +66,7 @@ public class HashTree{
 	}
 	
 	void getFreqKFromHT(int k, double minSup) throws IOException{
-		BufferedReader br = new BufferedReader(new FileReader("data/ProcessedTransaction.txt"));
+		BufferedReader br = new BufferedReader(new FileReader("data/bins.txt"));
 		String s;
 		while((s=br.readLine())!=null){
 			StringTokenizer st = new StringTokenizer(s,",");

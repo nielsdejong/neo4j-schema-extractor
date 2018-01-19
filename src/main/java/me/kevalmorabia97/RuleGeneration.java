@@ -24,9 +24,7 @@ public class RuleGeneration {
 		this.maxLengthOfFreqItemsets = maxLengthOfFreqItemsets;
 		this.freqK = freqK;
 		this.noToAttr = noToAttr;
-		bw = new BufferedWriter(new FileWriter("data/AssociationRules.txt"));
 		generateRules();
-		bw.close();
 	}
 	
 	void generateRules() throws IOException{
@@ -59,8 +57,6 @@ public class RuleGeneration {
 			if(conf >= minConf){
 				conseqWithMoreConf.add(conseq);
                                 rules.add(ConvertItemset(antec)+"("+antecCount+") ----> "+ConvertItemset(conseq)+"("+ConseqCount+") conf("+conf+")");
-				bw.write(ConvertItemset(antec)+"("+antecCount+") ----> "+ConvertItemset(conseq)+"("+ConseqCount+") conf("+conf+")");
-				bw.newLine();
 			}
 		}
 		
