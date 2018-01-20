@@ -10,6 +10,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.neo4j.shell.util.json.JSONArray;
+import org.neo4j.shell.util.json.JSONException;
+import org.neo4j.shell.util.json.JSONObject;
 
 /**
  *
@@ -23,6 +28,7 @@ public class Schema {
     public int totalNodeCount = 0;
     public int totalEdgeCount = 0;
     public List<String> rules;
+
     public Schema() {
         nodeTypes = new HashMap<>();
         edgeTypes = new HashMap<>();
@@ -31,43 +37,71 @@ public class Schema {
 
     @Override
     public String toString() {
-        String schema = "Schema: " + "\n";
-
-        for (String name : nodeTypes.keySet()) {
-            schema += "    Node: " + name + "\n";
-            schema += "        fraction: " + nodeTypes.get(name).nodeCount / (double) totalNodeCount + "\n";
-
-            schema += "        outdistributions:" + "\n";
-            for (Entry<EdgeType, NodeType> outEdge : nodeTypes.get(name).outDistributions.keySet()) {
-                schema += "            [" + name + "-" + outEdge.getKey() + "->" + outEdge.getValue() + "]: " + nodeTypes.get(name).outDistributions.get(outEdge) + "\n";
+        JSONObject schemaJSON = new JSONObject();
+        try {
+            // add nodes to JSON
+            JSONArray nodesJSON = new JSONArray();
+            for (String name : nodeTypes.keySet()) {
+                
+                JSONObject node = new JSONObject();
+                node.put("name", name);
+                node.put("fraction", nodeTypes.get(name).nodeCount / (double) totalNodeCount);
+                JSONObject outDistributions = new JSONObject();
+                for (Entry<EdgeType, NodeType> outEdge : nodeTypes.get(name).outDistributions.keySet()) {
+                    outDistributions.put("[" + name + "-" + outEdge.getKey() + "->" + outEdge.getValue() + "]", nodeTypes.get(name).outDistributions.get(outEdge).toString());
+                }
+                node.put("outdistributions", outDistributions);
+                JSONObject inDistributions = new JSONObject();
+                for (Entry<NodeType, EdgeType> inEdge : nodeTypes.get(name).inDistributions.keySet()) {
+                    inDistributions.put("[" + inEdge.getKey() + "-" + inEdge.getValue() + "->" + name + "]", nodeTypes.get(name).inDistributions.get(inEdge).toString());
+                }
+                node.put("indistributions", inDistributions);
+                JSONArray properties = new JSONArray();
+                for (String propertyName : nodeTypes.get(name).properties.keySet()) {
+                    JSONObject property = new JSONObject();
+                    property.put("name", propertyName);
+                    property.put("dist", nodeTypes.get(name).properties.get(propertyName).amountDistribution.toString());
+                    property.put("class", nodeTypes.get(name).properties.get(propertyName).className.toString());
+                    property.put("valuedist", nodeTypes.get(name).properties.get(propertyName).valueSchema.toString());
+                    properties.put(property);
+                }
+                node.put("properties", properties);
+                nodesJSON.put(node);
             }
-            schema += "        indistributions:" + "\n";
-            for (Entry<NodeType, EdgeType> inEdge : nodeTypes.get(name).inDistributions.keySet()) {
-                schema += "            [" + inEdge.getKey() + "-" + inEdge.getValue() + "->" + name + "]: " + nodeTypes.get(name).inDistributions.get(inEdge) + "\n";
+            
+            // Add edges to json
+            JSONArray edgesJSON = new JSONArray();
+            for (String name : edgeTypes.keySet()) {
+                JSONObject edge = new JSONObject();
+                edge.put("name", name);
+                edge.put("fraction", edgeTypes.get(name).edgeCount / (double) totalEdgeCount);
+               
+                JSONArray properties = new JSONArray();
+                for (String propertyName : edgeTypes.get(name).properties.keySet()) {
+                    JSONObject property = new JSONObject();
+                    property.put("name", propertyName);
+                    property.put("dist", edgeTypes.get(name).properties.get(propertyName).amountDistribution.toString());
+                    property.put("class", edgeTypes.get(name).properties.get(propertyName).className.toString());
+                    property.put("valuedist", edgeTypes.get(name).properties.get(propertyName).valueSchema.toString());
+                    properties.put(property);
+                }
+                edge.put("properties", properties);
+                edgesJSON.put(edge);
             }
-            schema += "        properties: \n";
-            for (String propertyName : nodeTypes.get(name).properties.keySet()) {
-                schema += "            " + propertyName + "\n";
-                schema += "                dist:" + nodeTypes.get(name).properties.get(propertyName).amountDistribution + "\n";
-                schema += "                class:" + nodeTypes.get(name).properties.get(propertyName).className + "\n";
-                schema += "                valuedist:" + nodeTypes.get(name).properties.get(propertyName).valueSchema + "\n";
+            
+            JSONArray rulesJSON = new JSONArray();
+            for (String rule : rules) {
+                rulesJSON.put(rule);
             }
+            schemaJSON.put("nodes", nodesJSON);
+            schemaJSON.put("edges", edgesJSON);
+            schemaJSON.put("rules", rulesJSON);
+            return schemaJSON.toString(4);
+        } catch (JSONException ex) {
+            Logger.getLogger(Schema.class.getName()).log(Level.SEVERE, null, ex);
+            return "{}";
         }
-        for (String name : edgeTypes.keySet()) {
-            schema += "    Edge: " + name + "\n";
-            schema += "        fraction: " + edgeTypes.get(name).edgeCount / (double) totalEdgeCount + "\n";
-            schema += "        properties: \n";
-            for (String propertyName : edgeTypes.get(name).properties.keySet()) {
-                schema += "            " + propertyName + "\n";
-                schema += "                dist:" + edgeTypes.get(name).properties.get(propertyName).amountDistribution + "\n";
-                schema += "                class:" + edgeTypes.get(name).properties.get(propertyName).className + "\n";
-                schema += "                valuedist:" + edgeTypes.get(name).properties.get(propertyName).valueSchema + "\n";
-            }
-        }
-        schema += "    Association Rules: \n";
-        for (String rule : rules) {
-            schema += "        rule: " + rule + "\n";
-        }
-        return schema;
+        
+        
     }
 }
