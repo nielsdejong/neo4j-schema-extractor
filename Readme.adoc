@@ -1,9 +1,16 @@
 == Neo4j Property Graph Schema Extractor
+This code accompanies my research on defining a methodology for the extraction of a schema from a property graph. For a detailed explanation, find the related paper https://nielsdejong.nl/projects/graph/schema-extraction-methodology.pdf[here]. The property graph schema extractor consists of the following components:
 
-=== How to execute this code:
-- Start your local Neo4j Server (http://neo4j.com/download[Download & Install]).
-- Execute the built jar file with a parameter pointing to a Neo4J bolt connector: 
- java -jar .\schemagenerator-0.1-SNAPSHOT.jar  bolt://neo4j:1234@localhost
-- The resulting schema is written to a local file: schema.txt
+- A node/edge type identifier & counter.
+- Fitting of node degree distributions to a uniform, Gaussian & Zipfian distribution and goodness-of-fit testing.
+- Property occurance distribution fitting.
+- Property value distribution identification. 
+- Association rule mining on properties on the same element using property value ranges.
 
-This code is intended as a prototype. Configuration parameters might need to be adjusted in the source.
+=== How to execute the schema extractor:
+- Start a local Neo4j Server (http://neo4j.com/download[Download & Install]).
+- Execute the jar file from the command line or an IDE:
+ java -jar .\schemagenerator-0.1-SNAPSHOT.jar (optional: link to Neo4J bolt connector)
+- The resulting schema is written to an output-file: 'schema.txt'
+
+This code is intended as a prototype, configuration parameters might need to be adjusted in the source. This code uses a variety of open source libraries for distribution fitting, association rule mining and more. Feel free to contact me for more information.
