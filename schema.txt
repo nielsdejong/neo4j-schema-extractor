@@ -44,9 +44,9 @@
             "fraction": 0.2040259513649847,
             "indistributions": {
                 "[Actor-ACTS_IN->Movie]": "GAUSSIAN(norm=1015.9382747178306, mu=5.288962906656667, sigma=4.847939482048474, testparameter=0.22910286921033401",
-                "[Director-ACTS_IN->Movie]": "ZIPFIAN(alpha=5.264654058302312, xMin=6.0, testparameter=0.1887526174095124)",
-                "[Director-DIRECTED->Movie]": "ZIPFIAN(alpha=3.670945619554678, xMin=8.0, testparameter=0.020328235732935473)",
-                "[User-RATED->Movie]": "ZIPFIAN(alpha=2.4426950408889634, xMin=2.0, testparameter=0.18181818181818182)"
+                "[Director-ACTS_IN->Movie]": "ZIPFIAN(alpha=5.264654058302312, xMin=6.0, testparameter=0.1944361352078971)",
+                "[Director-DIRECTED->Movie]": "ZIPFIAN(alpha=3.670945619554678, xMin=8.0, testparameter=0.014919806042521447)",
+                "[User-RATED->Movie]": "ZIPFIAN(alpha=2.4426950408889634, xMin=2.0, testparameter=0.045454545454545456)"
             },
             "name": "Movie",
             "outdistributions": {},
@@ -145,10 +145,10 @@
         },
         {
             "fraction": 7.138211640043781E-4,
-            "indistributions": {"[User-FRIEND->User]": "ZIPFIAN(alpha=8.213475204444817, xMin=1.0, testparameter=0.0)"},
+            "indistributions": {"[User-FRIEND->User]": "ZIPFIAN(alpha=8.213475204444817, xMin=1.0, testparameter=0.2)"},
             "name": "User",
             "outdistributions": {
-                "[User-FRIEND->User]": "UNIFORM(min=1.0, max=3.0, testparameter=0.33333333333333337)",
+                "[User-FRIEND->User]": "ZIPFIAN(alpha=2.674331879653742, xMin=1.0, testparameter=0.3333333333333333)",
                 "[User-RATED->Movie]": "ZIPFIAN(alpha=7.1657586559410795, xMin=2.0, testparameter=0.21739130434782608)"
             },
             "properties": [
@@ -182,7 +182,7 @@
             "fraction": 0.6994971526466902,
             "indistributions": {},
             "name": "Actor",
-            "outdistributions": {"[Actor-ACTS_IN->Movie]": "ZIPFIAN(alpha=5.467072957329804, xMin=24.0, testparameter=0.27856770301834594)"},
+            "outdistributions": {"[Actor-ACTS_IN->Movie]": "ZIPFIAN(alpha=5.467072957329804, xMin=24.0, testparameter=0.2790666031702837)"},
             "properties": [
                 {
                     "class": "Long",
@@ -239,8 +239,8 @@
             "indistributions": {},
             "name": "Director",
             "outdistributions": {
-                "[Director-ACTS_IN->Movie]": "ZIPFIAN(alpha=5.163764463345236, xMin=26.0, testparameter=0.4929078014184397)",
-                "[Director-DIRECTED->Movie]": "ZIPFIAN(alpha=6.597059025322569, xMin=22.0, testparameter=0.3240019877422561)"
+                "[Director-ACTS_IN->Movie]": "ZIPFIAN(alpha=5.163764463345236, xMin=26.0, testparameter=0.4799054373522459)",
+                "[Director-DIRECTED->Movie]": "ZIPFIAN(alpha=6.597059025322569, xMin=22.0, testparameter=0.32333940699022695)"
             },
             "properties": [
                 {

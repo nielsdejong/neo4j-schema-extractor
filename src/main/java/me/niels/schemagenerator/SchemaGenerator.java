@@ -24,6 +24,8 @@ import me.niels.schemagenerator.graph.Graph;
 import me.niels.schemagenerator.graph.Property;
 import me.niels.schemagenerator.schema.PropertyType;
 import me.niels.schemagenerator.schema.Schema;
+import me.niels.schemagenerator.schema.SchemaToJsonConverter;
+import me.niels.schemagenerator.schema.SchemaToXMLConverter;
 import me.niels.schemagenerator.schema.ValueSchema;
 import me.niels.schemagenerator.values.enumerated.EnumDistribution;
 import me.niels.values.schemagenerator.distribution.GaussianDistribution;
@@ -45,21 +47,27 @@ public class SchemaGenerator {
     public Schema schema;
 
     public static void main(String[] args) {
-        // Get dbURL from arguments.
+        // Parse arguments passed into the console.
+        boolean useJSON = true;
         String dbURL;
         if (args.length == 0) {
             dbURL = "bolt://neo4j:1234@localhost";
         } else {
             dbURL = args[0];
+            if(args.length > 1){
+                if(args[1].equals("XML")){
+                    useJSON = false;
+                }
+            }
         }
 
-        // Generate Schema.
+        // Read graph from Neo4J bolt connector and generate using schema extractor.
         SchemaGenerator gen = new SchemaGenerator(dbURL);
         Long startTime = System.currentTimeMillis();
         System.out.println("Started Schema generation for database at " + dbURL + "...");
         gen.generateSchema();
 
-        // Write to file.
+        // Write generated schema to file in specified format.
         File file = new File("schema.txt");
         FileWriter fileWriter;
         BufferedWriter writer;
@@ -67,7 +75,12 @@ public class SchemaGenerator {
         try {
             fileWriter = new FileWriter(file);
             writer = new BufferedWriter(fileWriter);
-            writer.write(gen.schema.toString());
+            if(useJSON == true){
+                writer.write(SchemaToJsonConverter.convert(gen.schema));
+            }else{
+                writer.write(SchemaToXMLConverter.convert(gen.schema));
+            }
+            
             writer.close();
         } catch (IOException ex) {
             Logger.getLogger(SchemaGenerator.class.getName()).log(Level.SEVERE, null, ex);
@@ -85,6 +98,7 @@ public class SchemaGenerator {
 
         // Load basic graph information from Neo4J database.
         System.out.println("Processing graph data...");
+        
         dataLoader.loadNodeData(graph.nodes, schema.nodeTypes);
         dataLoader.loadEdgeData(graph.edges, schema.edgeTypes);
         dataLoader.loadStructureData(graph.nodes, graph.edges);
@@ -163,7 +177,6 @@ public class SchemaGenerator {
                 // Find a distribution based on the number of outgoing edges of
                 // each node of this type.
                 List<Integer> values = type.outDistributionCounter.get(key);
-                //System.out.println(type + "," + key);
                 NumericDistribution distribution = DistributionFitter.fitIntegerList(values);
                 schema.nodeTypes.get(label).outDistributions.put(key, distribution);
             }
@@ -171,7 +184,6 @@ public class SchemaGenerator {
                 // Find a distribution based on the number of outgoing edges of
                 // each node of this type.
                 List<Integer> values = type.inDistributionCounter.get(key);
-                //System.out.println(key + "," + type);
                 NumericDistribution distribution = DistributionFitter.fitIntegerList(values);
                 schema.nodeTypes.get(label).inDistributions.put(key, distribution);
             }
@@ -346,7 +358,6 @@ public class SchemaGenerator {
                     values.add((Double) value);
                 }
             }
-
             pType.valueSchema = DistributionFitter.fit(values);
         } else {
             // We are dealing with non-numeric values.
