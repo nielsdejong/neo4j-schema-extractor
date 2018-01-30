@@ -104,7 +104,7 @@ public class SchemaToXMLConverter {
                         distributionElement.setAttribute("max", "" + ((UniformDistribution) valueSchema).max);
                         distributionWrapper.appendChild(distributionElement);
                     } else if (valueSchema.getClass() == EnumDistribution.class) {
-                        distributionWrapper = doc.createElement("catagorical");
+                        distributionWrapper = doc.createElement("categorical");
                         EnumDistribution enumDistribution = (EnumDistribution)valueSchema;
                         for(String category : enumDistribution.values.keySet()){
                             Element categoryElement = doc.createElement("category");
@@ -154,7 +154,7 @@ public class SchemaToXMLConverter {
                 for (Map.Entry<NodeType, EdgeType> inEdge : schema.nodeTypes.get(name).inDistributions.keySet()) {
                     Element relation = doc.createElement("relation");
                     relation.setAttribute("predicate", "" + inEdge.getValue());
-                    relation.setAttribute("target", "" + inEdge.getKey());
+                    relation.setAttribute("target", "" + name);
                     Element inDistribution = doc.createElement("inDistribution");
 
                     NumericDistribution distribution = schema.nodeTypes.get(name).inDistributions.get(inEdge);
@@ -213,7 +213,7 @@ public class SchemaToXMLConverter {
                         distributionElement.setAttribute("max", "" + ((UniformDistribution) valueSchema).max);
                         distributionWrapper.appendChild(distributionElement);
                     } else if (valueSchema.getClass() == EnumDistribution.class) {
-                        distributionWrapper = doc.createElement("catagorical");
+                        distributionWrapper = doc.createElement("categorical");
                     } else if (valueSchema.getClass() == RegularExpression.class) {
                         distributionWrapper = doc.createElement("regex");
                         distributionWrapper.setTextContent(((RegularExpression) valueSchema).regex);

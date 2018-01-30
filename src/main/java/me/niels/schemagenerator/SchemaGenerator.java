@@ -2,8 +2,11 @@ package me.niels.schemagenerator;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.AbstractMap;
 import me.niels.values.schemagenerator.distribution.DistributionFitter;
 import me.niels.schemagenerator.schema.EdgeType;
@@ -35,7 +38,7 @@ import me.niels.values.schemagenerator.regex.RegularExpression;
 
 public class SchemaGenerator {
 
-    public static final double ENUM_PERCENTAGE_LIMIT = 0.05;
+    public static final double ENUM_PERCENTAGE_LIMIT = 0.2;
     public static final double RULE_MIN_SUPPORT = 0.05;
     public static final double RULE_MIN_CONFIDENCE = 0.5;
     public static final int RULE_MINING_BINS = 8;
@@ -54,8 +57,8 @@ public class SchemaGenerator {
             dbURL = "bolt://neo4j:1234@localhost";
         } else {
             dbURL = args[0];
-            if(args.length > 1){
-                if(args[1].equals("XML")){
+            if (args.length > 1) {
+                if (args[1].equals("XML")) {
                     useJSON = false;
                 }
             }
@@ -69,23 +72,21 @@ public class SchemaGenerator {
 
         // Write generated schema to file in specified format.
         File file = new File("schema.txt");
-        FileWriter fileWriter;
         BufferedWriter writer;
-        
+
         try {
-            fileWriter = new FileWriter(file);
-            writer = new BufferedWriter(fileWriter);
-            if(useJSON == true){
+            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
+            if (useJSON == true) {
                 writer.write(SchemaToJsonConverter.convert(gen.schema));
-            }else{
+            } else {
                 writer.write(SchemaToXMLConverter.convert(gen.schema));
             }
-            
+
             writer.close();
         } catch (IOException ex) {
             Logger.getLogger(SchemaGenerator.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println("Schema written to '"+file.getAbsolutePath()+"'. Total execution time: " + (System.currentTimeMillis() - startTime) + " ms");
+        System.out.println("Schema written to '" + file.getAbsolutePath() + "'. Total execution time: " + (System.currentTimeMillis() - startTime) + " ms");
     }
 
     private SchemaGenerator(String dbURL) {
@@ -98,7 +99,7 @@ public class SchemaGenerator {
 
         // Load basic graph information from Neo4J database.
         System.out.println("Processing graph data...");
-        
+
         dataLoader.loadNodeData(graph.nodes, schema.nodeTypes);
         dataLoader.loadEdgeData(graph.edges, schema.edgeTypes);
         dataLoader.loadStructureData(graph.nodes, graph.edges);
@@ -126,7 +127,7 @@ public class SchemaGenerator {
 
         System.out.println("Generating Association Rules...");
         // Determine Property Value Relationships
-        computeAssociationRules();
+        //computeAssociationRules();
     }
 
     public void countEdgeDistributions() {
