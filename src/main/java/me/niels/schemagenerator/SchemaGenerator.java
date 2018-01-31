@@ -127,7 +127,7 @@ public class SchemaGenerator {
 
         System.out.println("Generating Association Rules...");
         // Determine Property Value Relationships
-        //computeAssociationRules();
+        computeAssociationRules();
     }
 
     public void countEdgeDistributions() {
