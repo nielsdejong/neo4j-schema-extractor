@@ -14,3 +14,6 @@ This code accompanies my research on defining a methodology for the extraction o
 - The resulting schema is written to an output-file: 'schema.txt'
 
 This code is intended as a prototype, configuration parameters might need to be adjusted in the source. This code uses a variety of open source libraries for distribution fitting, association rule mining and more. Feel free to contact me for more information.
+
+=== Next
+Use your resulting schema in pgMark (https://github.com/ThomHurks/pgMark/) to generate a new graph.
